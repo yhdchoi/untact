@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.util.Util;
 
 @Controller
 public class UsrArticleController {
@@ -47,7 +48,10 @@ public class UsrArticleController {
 	//Add an article
 	@RequestMapping("/usr/article/add")
 	@ResponseBody
-	public Map<String, Object> doAdd(String regDate, String title, String body) {
+	public Map<String, Object> doAdd(String title, String body) {	
+		//Registering current date
+		String regDate = Util.getNowDateStr();		
+		
 		articles.add(new Article(++articlesLastId, regDate, title, body));
 		
 		//CodeCheck : 'S' == Success, 'F' == Fail
@@ -58,8 +62,8 @@ public class UsrArticleController {
 		
 		return rs;
 	}
-	
-	
+
+
 	//Delete an article
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
