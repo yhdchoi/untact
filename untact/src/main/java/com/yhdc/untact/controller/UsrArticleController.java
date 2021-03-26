@@ -64,13 +64,9 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
 	public Map<String, Object> doDelete(int id) {
-		
-		//Don't do this because it changes the length of the array and id of other articles  
-		//articles.remove(id-1);
 				
 		boolean deleteArticleResult = deleteArticle(id);		
-		
-		//CodeCheck : 'S' == Success, 'F' == Fail
+
 		Map<String, Object> rs = new HashMap<>();
 		
 		if(deleteArticleResult) {
@@ -100,7 +96,43 @@ public class UsrArticleController {
 	}
 	
 	
-	//Update an article
+	//Modify an article
+	@RequestMapping("/usr/article/modify")
+	@ResponseBody
+	public Map<String, Object> doModify(int id, String title, String body) {
+		Article selArticle = null;
+		
+		for(Article article : articles) {
+			if(article.getId() == id) {
+				selArticle = article;
+				break;
+			}
+		}
+		
+		Map<String, Object> rs = new HashMap<>();
+
+		if(selArticle == null)  {
+			rs.put("resultCode", "F-1");
+			rs.put("msg", String.format("%d article does not exist.", id));
+			return rs;
+		}
+		
+		selArticle.setTitle(title);
+		selArticle.setBody(body);
+
+		rs.put("resultCode", "S-1");
+		rs.put("msg", String.format("%d article has been modified.", id));		
+		return rs;			
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
