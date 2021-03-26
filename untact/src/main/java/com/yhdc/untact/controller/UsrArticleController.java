@@ -18,13 +18,12 @@ public class UsrArticleController {
 	private List<Article> articles;
 	
 	public UsrArticleController() {
-		//
 		articlesLastId = 0;
 		articles = new ArrayList<>();
 		
 		//initial data
-		articles.add(new Article(++articlesLastId, "2021-04-01 12:12:12", "Title1", "Content1"));
-		articles.add(new Article(++articlesLastId, "2021-04-01 12:12:12", "Title2", "Content2"));		
+		articles.add(new Article(++articlesLastId, "2021-04-01 12:12:12", "2021-04-01 12:12:12", "Title1", "Content1"));
+		articles.add(new Article(++articlesLastId, "2021-04-01 12:12:12", "2021-04-01 12:12:12", "Title2", "Content2"));		
 	}
 	
 	
@@ -50,9 +49,10 @@ public class UsrArticleController {
 	@ResponseBody
 	public Map<String, Object> doAdd(String title, String body) {	
 		//Registering current date
-		String regDate = Util.getNowDateStr();		
+		String regDate = Util.getNowDateStr();
+		String updateDate = regDate;
 		
-		articles.add(new Article(++articlesLastId, regDate, title, body));
+		articles.add(new Article(++articlesLastId, regDate, updateDate, title, body));
 		
 		//CodeCheck : 'S' == Success, 'F' == Fail
 		Map<String, Object> rs = new HashMap<>();
@@ -106,6 +106,7 @@ public class UsrArticleController {
 	public Map<String, Object> doModify(int id, String title, String body) {
 		Article selArticle = null;
 		
+		//Scan
 		for(Article article : articles) {
 			if(article.getId() == id) {
 				selArticle = article;
@@ -113,6 +114,7 @@ public class UsrArticleController {
 			}
 		}
 		
+		//Check
 		Map<String, Object> rs = new HashMap<>();
 
 		if(selArticle == null)  {
@@ -121,6 +123,8 @@ public class UsrArticleController {
 			return rs;
 		}
 		
+		//Insert
+		selArticle.setUpdateDate(Util.getNowDateStr());
 		selArticle.setTitle(title);
 		selArticle.setBody(body);
 
@@ -128,16 +132,5 @@ public class UsrArticleController {
 		rs.put("msg", String.format("%d article has been modified.", id));		
 		return rs;			
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }
