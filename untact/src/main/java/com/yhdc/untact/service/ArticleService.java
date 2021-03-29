@@ -1,79 +1,61 @@
 package com.yhdc.untact.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yhdc.untact.dao.ArticleDao;
 import com.yhdc.untact.dto.Article;
-import com.yhdc.untact.util.Util;
+import com.yhdc.untact.dto.ResultData;
 
 @Service
 public class ArticleService {
 
-	private int lastArticleId;
-	public List<Article> articles;
+	@Autowired
+	private ArticleDao articleDao;
 
-	public ArticleService() {
-		lastArticleId = 0;
-		articles = new ArrayList<>();
-		makeInitData();
-	}
-	
-	// INIT
-	public void makeInitData() {
-		for (int i = 0; i < 5; i++) {
-			writeNewArticle("ttt", "ccc");
-		}
+	// LIST
+	public List<Article> doList() {
+		return articleDao.doList();
 	}
 
 	// GET
 	public Article getArticleById(int id) {
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				return article;
-			}
-		}
-		return null;
+
+		return articleDao.getArticleById(id);
 	}
 
 	// WRITE
-	public int writeNewArticle(String title, String content) {
-		int id = lastArticleId + 1;
-		String regDate = Util.getNowDateStr();
-		String upDate = Util.getNowDateStr();
+	public ResultData writeNewArticle(String title, String content) {
+		int id = articleDao.writeNewArticle(title, content);
+		Article article = articleDao.getArticleById(id);
 
-		Article newArticle = new Article(id, regDate, upDate, title, content);
-		articles.add(newArticle);
+		return new ResultData("S-1", id + "번 글이 작성되었습니다.", "article", article);
 
-		lastArticleId = id;
-		return id;
 	}
 
 	// EDIT
-	public boolean editArticle(int id, String title, String content) {
+	public ResultData editArticle(int id, String title, String content) {
 		Article article = getArticleById(id);
 
 		if (article == null) {
-			return false;
+			return new ResultData("F-4", id + "번 글이 존제하지 않습니다.", "id", id);
 		}
 
-		article.setUpDate(Util.getNowDateStr());
-		article.setTitle(title);
-		article.setContent(content);
+		articleDao.editArticle(id, title, content);
 
-		return true;
+		return new ResultData("S-1", id + "번 글이 수정되었습니다.", "article", article);
 	}
 
 	// DELETE
-	public boolean deleteArticleById(int id) {
+	public ResultData deleteArticleById(int id) {
 		Article article = getArticleById(id);
 
 		if (article == null) {
-			return false;
+			return new ResultData("F-1", id + "번 글이 존제하지 않습니.", "id", id);
 		}
 
-		articles.remove(article);
-		return true;
+		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id);
 	}
 }

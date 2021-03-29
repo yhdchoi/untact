@@ -22,7 +22,7 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
 	public List<Article> doList() {
-		return articleService.articles;
+		return articleService.doList();
 	}
 
 	// GET AN ARTICLE
@@ -59,11 +59,7 @@ public class UsrArticleController {
 			return new ResultData("F-2", "내용을 작성해 주세요.");
 		}
 
-		// IF OK
-		int id = articleService.writeNewArticle(title, content);
-		Article article = articleService.getArticleById(id);
-
-		return new ResultData("S-1", id + "번 글이 작성되었습니다.", "article", article);
+		return articleService.writeNewArticle(title, content);
 	}
 
 	// EDIT ARTICLE
@@ -84,14 +80,7 @@ public class UsrArticleController {
 			return new ResultData("F-3", "내용을 작성해 주세요.");
 		}
 
-		boolean result = articleService.editArticle(id, title, content);
-
-		// CHECK ARTICLE
-		if (result == false) {
-			return new ResultData("F-4", id + "번 글이 존제하지 않습니다.", "id", id);
-		}
-
-		return new ResultData("S-1", id + "번 글이 수정되었습니다.", "article", articleService.getArticleById(id));
+		return articleService.editArticle(id, title, content);
 	}
 
 	// DELETE AN ARTICLE
@@ -101,16 +90,9 @@ public class UsrArticleController {
 
 		// CHECK INPUT
 		if (Util.isEmpty(id)) {
-			return new ResultData("F-1", "제목을 작성해 주세요.");
+			return new ResultData("F-1", "ID을 입력해 주세요.");
 		}
 
-		boolean result = articleService.deleteArticleById(id);
-
-		// CHECK ARTICLE
-		if (result == false) {
-			return new ResultData("F-1", id + "번 글이 존제하지 않습니.", "id", id);
-		}
-
-		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id);
+		return articleService.deleteArticleById(id);
 	}
 }
