@@ -1,136 +1,116 @@
 package com.yhdc.untact.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.dto.ResultData;
+import com.yhdc.untact.service.ArticleService;
 import com.yhdc.untact.util.Util;
 
 @Controller
 public class UsrArticleController {
-	private  int articlesLastId;
-	private List<Article> articles;
-	
-	public UsrArticleController() {
-		articlesLastId = 0;
-		articles = new ArrayList<>();
-		
-		//initial data
-		articles.add(new Article(++articlesLastId, "2021-04-01 12:12:12", "2021-04-01 12:12:12", "Title1", "Content1"));
-		articles.add(new Article(++articlesLastId, "2021-04-01 12:12:12", "2021-04-01 12:12:12", "Title2", "Content2"));		
-	}
-	
-	
-	//Show the requested article
-	@RequestMapping("/usr/article/detail")
-	@ResponseBody
-	public Article showDetail(int id) {
-		
-		return articles.get(id-1);
-	}
-	
-	
-	//Show all the articles
+
+	@Autowired
+	private ArticleService articleService;
+
+	// LIST ARTICLES
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> showList() {
-		return articles;
+	public List<Article> doList() {
+		return articleService.articles;
 	}
-	
-	
-	//Add an article
-	@RequestMapping("/usr/article/add")
+
+	// GET AN ARTICLE
+	@RequestMapping("/usr/article/get")
 	@ResponseBody
-	public Map<String, Object> doAdd(String title, String body) {	
-		//Registering current date
-		String regDate = Util.getNowDateStr();
-		String updateDate = regDate;
-		
-		articles.add(new Article(++articlesLastId, regDate, updateDate, title, body));
-		
-		//CodeCheck : 'S' == Success, 'F' == Fail
-		Map<String, Object> rs = new HashMap<>();
-		rs.put("resultCode", "S-1");
-		rs.put("msg", "Successfully added.");
-		rs.put("id", articlesLastId);
-		
-		return rs;
+	public ResultData doGet(Integer id) {
+
+		// CHECK INPUT
+		if (Util.isEmpty(id)) {
+			return new ResultData("F-1", "ID을 입력해 주세요.");
+		}
+
+		Article article = articleService.getArticleById(id);
+
+		// CHECK ARTICLE
+		if (article == null) {
+			return new ResultData("F-1", id + "번 글은 존제하지 않습니다.");
+		}
+
+		return new ResultData("S-1", id + "번 글이 입니다.", "article", article);
 	}
 
+	// WRITE A NEW ARTICLE
+	@RequestMapping("/usr/article/write")
+	@ResponseBody
+	public ResultData doWrite(String title, String content) {
 
-	//Delete an article
+		// CHECK INPUT
+		if (Util.isEmpty(title)) {
+			return new ResultData("F-1", "제목을 작성해 주세요.");
+		}
+
+		if (Util.isEmpty(content)) {
+			return new ResultData("F-2", "내용을 작성해 주세요.");
+		}
+
+		// IF OK
+		int id = articleService.writeNewArticle(title, content);
+		Article article = articleService.getArticleById(id);
+
+		return new ResultData("S-1", id + "번 글이 작성되었습니다.", "article", article);
+	}
+
+	// EDIT ARTICLE
+	@RequestMapping("/usr/article/edit")
+	@ResponseBody
+	public ResultData doEdit(Integer id, String title, String content) {
+
+		// CHECK INPUT
+		if (Util.isEmpty(id)) {
+			return new ResultData("F-1", "ID을 입력해 주세요.");
+		}
+
+		if (Util.isEmpty(title)) {
+			return new ResultData("F-2", "제목을 작성해 주세요.");
+		}
+
+		if (Util.isEmpty(content)) {
+			return new ResultData("F-3", "내용을 작성해 주세요.");
+		}
+
+		boolean result = articleService.editArticle(id, title, content);
+
+		// CHECK ARTICLE
+		if (result == false) {
+			return new ResultData("F-4", id + "번 글이 존제하지 않습니다.", "id", id);
+		}
+
+		return new ResultData("S-1", id + "번 글이 수정되었습니다.", "article", articleService.getArticleById(id));
+	}
+
+	// DELETE AN ARTICLE
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
-	public Map<String, Object> doDelete(int id) {
-				
-		boolean deleteArticleResult = deleteArticle(id);		
+	public ResultData doDelete(Integer id) {
 
-		Map<String, Object> rs = new HashMap<>();
-		
-		if(deleteArticleResult) {
-			rs.put("resultCode", "S-1");
-			rs.put("msg", "Successfully added.");
-		}
-		else {
-			rs.put("resultCode", "F-1");
-			rs.put("msg", "Failed to delete.");
+		// CHECK INPUT
+		if (Util.isEmpty(id)) {
+			return new ResultData("F-1", "제목을 작성해 주세요.");
 		}
 
-		rs.put("id", id);
-		
-		return rs;
+		boolean result = articleService.deleteArticleById(id);
+
+		// CHECK ARTICLE
+		if (result == false) {
+			return new ResultData("F-1", id + "번 글이 존제하지 않습니.", "id", id);
+		}
+
+		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id);
 	}
-	
-
-	//Delete an article without tempering the array
-	private boolean deleteArticle(int id) {
-		for (Article article : articles) {
-			if(article.getId() == id) {
-				articles.remove(article);
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	
-	//Modify an article
-	@RequestMapping("/usr/article/modify")
-	@ResponseBody
-	public Map<String, Object> doModify(int id, String title, String body) {
-		Article selArticle = null;
-		
-		//Scan
-		for(Article article : articles) {
-			if(article.getId() == id) {
-				selArticle = article;
-				break;
-			}
-		}
-		
-		//Check
-		Map<String, Object> rs = new HashMap<>();
-
-		if(selArticle == null)  {
-			rs.put("resultCode", "F-1");
-			rs.put("msg", String.format("%d article does not exist.", id));
-			return rs;
-		}
-		
-		//Insert
-		selArticle.setUpdateDate(Util.getNowDateStr());
-		selArticle.setTitle(title);
-		selArticle.setBody(body);
-
-		rs.put("resultCode", "S-1");
-		rs.put("msg", String.format("%d article has been modified.", id));		
-		return rs;			
-	}
-		
 }
