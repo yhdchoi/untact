@@ -8,11 +8,10 @@ import com.yhdc.untact.dto.Article;
 @Mapper
 public interface ArticleDao {
 
-	// LIST
-	Article doList();
-
 	// GET
 	Article getArticleById(@Param("id") int id);
+	
+	int getLastInsertId();
 
 	// WRITE
 	int writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,

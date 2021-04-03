@@ -16,13 +16,6 @@ public class UsrArticleController {
 	@Autowired
 	private ArticleService articleService;
 
-	// LIST ARTICLES
-	@RequestMapping("/usr/article/list")
-	@ResponseBody
-	public Article doList() {
-		return articleService.doList();
-	}
-
 	// GET AN ARTICLE
 	@RequestMapping("/usr/article/get")
 	@ResponseBody
