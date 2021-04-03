@@ -1,84 +1,27 @@
 package com.yhdc.untact.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.yhdc.untact.dto.Article;
-import com.yhdc.untact.util.Util;
 
-@Component
-public class ArticleDao {
-
-	private int lastArticleId;
-	private List<Article> articles;
-
-	public ArticleDao() {
-		lastArticleId = 0;
-		articles = new ArrayList<>();
-		makeInitData();
-	}
-
-	// INIT
-	public void makeInitData() {
-		for (int i = 0; i < 5; i++) {
-			writeNewArticle("ttt", "ccc");
-		}
-	}
+@Mapper
+public interface ArticleDao {
 
 	// LIST
-	public List<Article> doList() {
-		return articles;
-	}
+	Article doList();
 
 	// GET
-	public Article getArticleById(int id) {
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				return article;
-			}
-		}
-		return null;
-	}
+	Article getArticleById(@Param("id") int id);
 
 	// WRITE
-	public int writeNewArticle(String title, String content) {
-		int id = lastArticleId + 1;
-		String regDate = Util.getNowDateStr();
-		String upDate = Util.getNowDateStr();
-
-		Article newArticle = new Article(id, regDate, upDate, title, content);
-		articles.add(newArticle);
-
-		lastArticleId = id;
-		return id;
-	}
+	int writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
+			@Param("content") String content);
 
 	// EDIT
-	public boolean editArticle(int id, String title, String content) {
-		Article article = getArticleById(id);
-
-		if (article == null) {
-			return false;
-		}
-
-		article.setUpDate(Util.getNowDateStr());
-		article.setTitle(title);
-		article.setContent(content);
-
-		return true;
-	}
+	boolean editArticle(@Param("id") int id, @Param("title") String title, @Param("content") String content);
 
 	// DELETE
-	public boolean deleteArticleById(int id) {
-		Article article = getArticleById(id);
+	boolean deleteArticleById(@Param("id") int id);
 
-		if (article == null) {
-			return false;
-		}
-
-		articles.remove(article);
-		return true;
-	}
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhdc.untact.dao.ArticleDao">
+
+	<select id="getArticleById" resultType="Article">
+		SELECT *
+		FROM article AS A
+		WHERE A.id = #{id}
+	</select>
+
+	<update id="editArticle">
+		UPDATE article
+		SET updateDate = NOW(),
+		title =
+		#{title},
+		body = #{body}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="writeNewArticle">
+		INSERT INTO article
+		SET regDate = NOW(),
+		updateDate =
+		NOW(),
+		boardId = #{boardId},
+		memberId = #{memberId},
+		title = #{title},
+		body = #{body}
+	</insert>
+
+	<update id="deleteArticleById">
+		UPDATE article
+		SET delStatus = 1,
+		delDate = NOW()
+		WHERE
+		id = #{id}
+	</update>
+
+	<select id="doList" resultType="Article">
+		SELECT *
+		FROM article
+	</select>
+
+</mapper>

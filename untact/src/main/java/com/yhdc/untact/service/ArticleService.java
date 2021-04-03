@@ -1,7 +1,5 @@
 package com.yhdc.untact.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +14,7 @@ public class ArticleService {
 	private ArticleDao articleDao;
 
 	// LIST
-	public List<Article> doList() {
+	public Article doList() {
 		return articleDao.doList();
 	}
 
@@ -28,7 +26,11 @@ public class ArticleService {
 
 	// WRITE
 	public ResultData writeNewArticle(String title, String content) {
-		int id = articleDao.writeNewArticle(title, content);
+		int id = 1; // fake data
+		int boardId = 3; // fake data
+		int memberId = 3; // fake data
+
+		articleDao.writeNewArticle(boardId, memberId, title, content);
 		Article article = articleDao.getArticleById(id);
 
 		return new ResultData("S-1", id + "번 글이 작성되었습니다.", "article", article);

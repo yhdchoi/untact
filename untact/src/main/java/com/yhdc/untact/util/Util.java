@@ -21,13 +21,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Util {
-
+	
+	//Current Date in String
 	public static String getNowDateStr() {
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date time = new Date();
 		return format1.format(time);
 	}
-
+	
+	//Print Map
 	public static Map<String, Object> mapOf(Object... args) {
 		if (args.length % 2 != 0) {
 			throw new IllegalArgumentException("인자를 짝수개 입력해주세요.");

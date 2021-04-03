@@ -1,7 +1,5 @@
 package com.yhdc.untact.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +19,7 @@ public class UsrArticleController {
 	// LIST ARTICLES
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> doList() {
+	public Article doList() {
 		return articleService.doList();
 	}
 
