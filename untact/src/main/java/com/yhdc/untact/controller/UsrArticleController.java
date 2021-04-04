@@ -15,6 +15,14 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	// GET LIST
+	@RequestMapping("/usr/article/list")
+	@ResponseBody
+	public String showList(int boardId) {
+
+		return "/usr/aticle/list";
+	}
 
 	// GET AN ARTICLE
 	@RequestMapping("/usr/article/get")
