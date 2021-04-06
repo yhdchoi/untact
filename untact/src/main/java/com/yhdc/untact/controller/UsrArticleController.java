@@ -32,7 +32,7 @@ public class UsrArticleController {
 		return "common/redirect";
 	}
 
-	// GET BOARD
+	// LIST
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, int boardId) {
 		Board board = articleService.getBoardById(boardId);
@@ -42,10 +42,14 @@ public class UsrArticleController {
 		}
 
 		req.setAttribute("board", board);
+		
+		int totalItemsCount = articleService.getArticlesTotalCount(boardId);
+		
+		req.setAttribute("totalItemsCount", totalItemsCount);
 		return "usr/article/list";
 	}
 
-	// GET AN ARTICLE
+	// GET
 	@RequestMapping("/usr/article/get")
 	@ResponseBody
 	public ResultData doGet(Integer id) {

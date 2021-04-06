@@ -26,4 +26,6 @@ public interface ArticleDao {
 	// DELETE
 	boolean deleteArticleById(@Param("id") int id);
 
+	int getArticlesTotalCount(@Param("boardId") int boardId);
+
 }

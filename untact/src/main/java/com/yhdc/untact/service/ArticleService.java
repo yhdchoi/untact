@@ -23,6 +23,10 @@ public class ArticleService {
 	public Board getBoardById(int id) {
 		return articleDao.getBoardById(id);
 	}
+	
+	public int getArticlesTotalCount(int boardId) {
+		return articleDao.getArticlesTotalCount(boardId);
+	}
 
 	// WRITE
 	public ResultData writeNewArticle(String title, String content) {
@@ -70,6 +74,8 @@ public class ArticleService {
 
 		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id, "boardId", article.getBoardId());
 	}
+
+
 
 
 }
