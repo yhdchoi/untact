@@ -18,23 +18,29 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-	
+
 	// RETURN MSG
 	private String msgAndBack(HttpServletRequest req, String msg) {
 		req.setAttribute("msg", msg);
+		req.setAttribute("historyBack", true);
 		return "common/redirect";
 	}
 
-	
+	private String msgAndReplace(HttpServletRequest req, String msg, String replaceUrl) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("replaceUrl", replaceUrl);
+		return "common/redirect";
+	}
+
 	// GET BOARD
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, int boardId) {
 		Board board = articleService.getBoardById(boardId);
-		
+
 		if (board == null) {
 			return msgAndBack(req, boardId + "번 게시판이 존제하지 않습니다.");
 		}
-		
+
 		req.setAttribute("board", board);
 		return "usr/article/list";
 	}
@@ -59,7 +65,7 @@ public class UsrArticleController {
 		return new ResultData("S-1", id + "번 글이 입니다.", "article", article);
 	}
 
-	// WRITE 
+	// WRITE
 	@RequestMapping("/usr/article/write")
 	@ResponseBody
 	public ResultData doWrite(String title, String content) {
@@ -76,7 +82,7 @@ public class UsrArticleController {
 		return articleService.writeNewArticle(title, content);
 	}
 
-	// EDIT 
+	// EDIT
 	@RequestMapping("/usr/article/edit")
 	@ResponseBody
 	public ResultData doEdit(Integer id, String title, String content) {
@@ -97,16 +103,23 @@ public class UsrArticleController {
 		return articleService.editArticle(id, title, content);
 	}
 
-	// DELETE 
+	// DELETE
 	@RequestMapping("/usr/article/delete")
-	@ResponseBody
-	public ResultData doDelete(Integer id) {
+	public String doDelete(HttpServletRequest req, Integer id) {
 
 		// CHECK INPUT
 		if (Util.isEmpty(id)) {
-			return new ResultData("F-1", "ID을 입력해 주세요.");
+			return msgAndBack(req, "게시물 ID를 입력해 주세요.");
 		}
 
-		return articleService.deleteArticleById(id);
+		ResultData rd = articleService.deleteArticleById(id);
+
+		if (rd.isFail()) {
+			return msgAndBack(req, rd.getMsg());
+		}
+
+		String redirectUrl = "../article/list?boardId=" + rd.getBody().get("boardId");
+
+		return msgAndReplace(req, rd.getMsg(), redirectUrl);
 	}
 }

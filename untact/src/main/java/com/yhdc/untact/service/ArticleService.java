@@ -68,7 +68,7 @@ public class ArticleService {
 			return new ResultData("F-1", id + "번 글이 존제하지 않습니.", "id", id);
 		}
 
-		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id);
+		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id, "boardId", article.getBoardId());
 	}
 
 
