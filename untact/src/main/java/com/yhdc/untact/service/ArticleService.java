@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.yhdc.untact.dao.ArticleDao;
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.dto.Board;
 import com.yhdc.untact.dto.ResultData;
 
 @Service
@@ -16,6 +17,11 @@ public class ArticleService {
 	// GET
 	public Article getArticleById(int id) {
 		return articleDao.getArticleById(id);
+	}
+	
+	// GET BOARD
+	public Board getBoardById(int id) {
+		return articleDao.getBoardById(id);
 	}
 
 	// WRITE
@@ -64,4 +70,6 @@ public class ArticleService {
 
 		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id);
 	}
+
+
 }

@@ -15,6 +15,13 @@
 	<select id="getLastInsertId" resultType="int">
 		SELECT LAST_INSERT_ID()
 	</select>
+	
+	<select id="getBoardById" resultType="Board">
+		SELECT *
+		FROM board AS B
+		WHERE B.id = #{id}
+		AND B.delStatus = 0
+	</select>
 
 	<update id="editArticle">
 		UPDATE article

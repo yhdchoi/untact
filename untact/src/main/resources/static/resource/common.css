@@ -61,7 +61,7 @@ html > body {
 }
 
 .title-bar {
-
+	padding-top: 4rem;
 }
 
 .title-bar:first-child {

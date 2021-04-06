@@ -1,11 +1,14 @@
 package com.yhdc.untact.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.dto.Board;
 import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.service.ArticleService;
 import com.yhdc.untact.util.Util;
@@ -16,12 +19,24 @@ public class UsrArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
-	// GET LIST
-	@RequestMapping("/usr/article/list")
-	@ResponseBody
-	public String showList(int boardId) {
+	// RETURN MSG
+	private String msgAndBack(HttpServletRequest req, String msg) {
+		req.setAttribute("msg", msg);
+		return "common/redirect";
+	}
 
-		return "/usr/aticle/list";
+	
+	// GET BOARD
+	@RequestMapping("/usr/article/list")
+	public String showList(HttpServletRequest req, int boardId) {
+		Board board = articleService.getBoardById(boardId);
+		
+		if (board == null) {
+			return msgAndBack(req, boardId + "번 게시판이 존제하지 않습니다.");
+		}
+		
+		req.setAttribute("board", board);
+		return "usr/article/list";
 	}
 
 	// GET AN ARTICLE
@@ -44,7 +59,7 @@ public class UsrArticleController {
 		return new ResultData("S-1", id + "번 글이 입니다.", "article", article);
 	}
 
-	// WRITE A NEW ARTICLE
+	// WRITE 
 	@RequestMapping("/usr/article/write")
 	@ResponseBody
 	public ResultData doWrite(String title, String content) {
@@ -61,7 +76,7 @@ public class UsrArticleController {
 		return articleService.writeNewArticle(title, content);
 	}
 
-	// EDIT ARTICLE
+	// EDIT 
 	@RequestMapping("/usr/article/edit")
 	@ResponseBody
 	public ResultData doEdit(Integer id, String title, String content) {
@@ -82,7 +97,7 @@ public class UsrArticleController {
 		return articleService.editArticle(id, title, content);
 	}
 
-	// DELETE AN ARTICLE
+	// DELETE 
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
 	public ResultData doDelete(Integer id) {

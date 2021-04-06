@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.dto.Board;
 
 @Mapper
 public interface ArticleDao {
@@ -13,6 +14,8 @@ public interface ArticleDao {
 	
 	int getLastInsertId();
 
+	Board getBoardById(@Param("id") int id);
+	
 	// WRITE
 	int writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
 			@Param("content") String content);
