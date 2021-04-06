@@ -30,7 +30,7 @@ updateDate = NOW(),
 boardId = 1,
 memberId = 1,
 title = '제목1',
-`body` = '본문1';
+content = '본문1';
 
 ## 1번회원이 1번 게시판에 2번글 작성
 INSERT INTO article
@@ -39,7 +39,7 @@ updateDate = NOW(),
 boardId = 1,
 memberId = 1,
 title = '제목2',
-`body` = '본문2';
+content = '본문2';
 
 ## 1번회원이 1번 게시판에 3번글 작성
 INSERT INTO article
@@ -48,7 +48,7 @@ updateDate = NOW(),
 boardId = 1,
 memberId = 1,
 title = '제목3',
-`body` = '본문3';
+content = '본문3';
 
 ## 2번회원이 1번 게시판에 4번글 작성
 INSERT INTO article
@@ -57,7 +57,7 @@ updateDate = NOW(),
 boardId = 1,
 memberId = 2,
 title = '제목4',
-`body` = '본문4';
+content = '본문4';
 
 ## 2번회원이 2번 게시판에 5번글 작성
 INSERT INTO article
@@ -66,7 +66,7 @@ updateDate = NOW(),
 boardId = 2,
 memberId = 2,
 title = '제목5',
-`body` = '본문5';
+content = '본문5';
 
 ## 2번회원이 2번 게시판에 6번글 작성
 INSERT INTO article
@@ -75,7 +75,7 @@ updateDate = NOW(),
 boardId = 2,
 memberId = 2,
 title = '제목6',
-`body` = '본문6';
+content = '본문6';
 
 # 게시판 테이블 생성
 CREATE TABLE board (

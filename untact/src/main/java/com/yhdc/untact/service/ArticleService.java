@@ -1,5 +1,7 @@
 package com.yhdc.untact.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +75,13 @@ public class ArticleService {
 		}
 
 		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id, "boardId", article.getBoardId());
+	}
+
+	public List<Article> getPrintArticles(int boardId, int itemsInPage, int page) {
+		int limitFrom = (page - 1) * itemsInPage;
+		int limitTake = itemsInPage;
+		
+		return articleDao.getPrintArticles(boardId, limitFrom, limitTake);
 	}
 
 

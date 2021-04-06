@@ -8,7 +8,7 @@ import lombok.Data;
 public class Article {
 	private int id;
 	private String regDate;
-	private String upDate;
+	private String updateDate;
 	private int boardId;
 	private int memberId;
 	private String title;
