@@ -77,11 +77,11 @@ public class ArticleService {
 		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id, "boardId", article.getBoardId());
 	}
 
-	public List<Article> getPrintArticles(int boardId, String keyword, int itemsInPage, int page) {
+	public List<Article> getPrintArticles(int boardId, String searchType, String keyword, int itemsInPage, int page) {
 		int limitFrom = (page - 1) * itemsInPage;
 		int limitTake = itemsInPage;
 		
-		return articleDao.getPrintArticles(boardId, keyword, limitFrom, limitTake);
+		return articleDao.getPrintArticles(boardId, searchType, keyword, limitFrom, limitTake);
 	}
 
 

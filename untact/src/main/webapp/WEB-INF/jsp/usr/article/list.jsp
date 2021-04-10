@@ -34,6 +34,7 @@
 					REG DATE : ${article.regDate}<br>
 					UPDATE DATE : ${article.updateDate}<br>
 					TITLE : ${article.title}<br>
+					CONTENT : ${article.content}<br>
 				</div>
 				<hr />
 			</c:forEach>

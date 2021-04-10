@@ -35,10 +35,18 @@
 		SELECT *
 		FROM article AS A
 		WHERE A.boardId = #{boardId}
-		AND (
+		<if test= "searchType == 'titleAndContent'">
+		AND	(		
 		A.title LIKE CONCAT ('%',#{keyword},'%')
 		OR A.content LIKE CONCAT ('%',#{keyword},'%')
 		)
+		</if>
+		<if test="searchType == 'title'">
+		AND	A.title LIKE CONCAT ('%',#{keyword},'%')		
+		</if>
+		<if test="searchType == 'content'">
+		AND	A.content LIKE CONCAT ('%',#{keyword},'%')		
+		</if>
 		ORDER BY A.id DESC
 		LIMIT #{limitFrom}, #{limitTake}
 	</select>	
