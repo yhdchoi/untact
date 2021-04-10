@@ -30,6 +30,6 @@ public interface ArticleDao {
 
 	int getArticlesTotalCount(@Param("boardId") int boardId);
 
-	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
+	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
 }

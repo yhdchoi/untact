@@ -37,7 +37,7 @@ public class UsrArticleController {
 
 	// LIST
 	@RequestMapping("/usr/article/list")
-	public String showList(HttpServletRequest req, int boardId, @RequestParam(defaultValue = "1") int page) {
+	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String keyword, @RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoardById(boardId);
 
 		if (board == null) {
@@ -59,7 +59,7 @@ public class UsrArticleController {
 		req.setAttribute("page", page);
 		req.setAttribute("totalPage", totalPage);
 		
-		List<Article> articles = articleService.getPrintArticles(boardId, itemsInPage, page);
+		List<Article> articles = articleService.getPrintArticles(boardId, keyword, itemsInPage, page);
 		
 		System.out.println("articles : " + articles);
 		
@@ -145,4 +145,6 @@ public class UsrArticleController {
 
 		return msgAndReplace(req, rd.getMsg(), redirectUrl);
 	}
+	
+
 }

@@ -21,7 +21,7 @@ public class ArticleService {
 		return articleDao.getArticleById(id);
 	}
 	
-	// GET BOARD
+	// LIST
 	public Board getBoardById(int id) {
 		return articleDao.getBoardById(id);
 	}
@@ -77,11 +77,11 @@ public class ArticleService {
 		return new ResultData("S-1", id + "번 글이 삭재되었습니다.", "id", id, "boardId", article.getBoardId());
 	}
 
-	public List<Article> getPrintArticles(int boardId, int itemsInPage, int page) {
+	public List<Article> getPrintArticles(int boardId, String keyword, int itemsInPage, int page) {
 		int limitFrom = (page - 1) * itemsInPage;
 		int limitTake = itemsInPage;
 		
-		return articleDao.getPrintArticles(boardId, limitFrom, limitTake);
+		return articleDao.getPrintArticles(boardId, keyword, limitFrom, limitTake);
 	}
 
 

@@ -21,6 +21,7 @@
 		FROM board AS B
 		WHERE B.id = #{id}
 		AND B.delStatus = 0
+		
 	</select>
 	
 	<select id="getArticlesTotalCount" resultType="int">
@@ -34,8 +35,12 @@
 		SELECT *
 		FROM article AS A
 		WHERE A.boardId = #{boardId}
+		AND (
+		A.title LIKE CONCAT ('%',#{keyword},'%')
+		OR A.content LIKE CONCAT ('%',#{keyword},'%')
+		)
 		ORDER BY A.id DESC
-		LIMIT #{limitFrom}, #{limitTake};
+		LIMIT #{limitFrom}, #{limitTake}
 	</select>	
 
 	<update id="editArticle">
