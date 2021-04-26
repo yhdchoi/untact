@@ -53,11 +53,11 @@ public class UsrArticleController {
 
 		req.setAttribute("board", board);
 		
-		int totalItemsCount = articleService.getArticlesTotalCount(boardId);
+		int totalItemsCount = articleService.getArticlesTotalCount(boardId, searchType, keyword);
 		
-//		if (keyword == null || keyword.trim().length() == 0) {
-//			return msgAndBack(req, "Keyword를 입력해주세요.");
-//		}
+		if (keyword == null || keyword.trim().length() == 0) {
+			return msgAndBack(req, "Keyword를 입력해주세요.");
+		}
 		
 		req.setAttribute("totalItemsCount", totalItemsCount);
 		
@@ -102,7 +102,7 @@ public class UsrArticleController {
 	//DETAIL
 	@RequestMapping("/usr/article/detail")
 	public String showDeatil(HttpServletRequest req, @RequestParam(defaultValue = "1") int id) {
-		Article article = articleService.getArticleById(id);
+		Article article = articleService.getArticlePrintById(id);
 		
 		if (article == null) {
 			return msgAndBack(req, id + "번 게시물은 존제하지 않습니다.");

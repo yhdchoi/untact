@@ -18,17 +18,20 @@ public interface ArticleDao {
 
 	Board getBoardById(@Param("id") int id);
 	
+	//DETAIL
+	Article getArticlePrintById(@Param("id") int id);
+	
 	// WRITE
-	int writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
+	void writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
 			@Param("content") String content);
 
 	// EDIT
 	boolean editArticle(@Param("id") int id, @Param("title") String title, @Param("content") String content);
 
 	// DELETE
-	boolean deleteArticleById(@Param("id") int id);
+	void deleteArticleById(@Param("id") int id);
 
-	int getArticlesTotalCount(@Param("boardId") int boardId);
+	int getArticlesTotalCount(@Param("boardId") int boardId, @Param("searchType") String searchType, @Param("keyword") String keyword);
 
 	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("searchType") String searchType, @Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
