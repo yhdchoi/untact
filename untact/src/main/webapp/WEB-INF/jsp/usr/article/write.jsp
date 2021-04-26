@@ -3,13 +3,43 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="pageTitle"
-	value="<span><i class='far fa-clipboard'></i></span> <span>${board.name} POST</span>" />
+	value="<span><i class='far fa-clipboard'></i></span> <span>${board.name} WRITE</span>" />
 
 <%@ include file="../common/head.jspf"%>
 
+<script>
+	let ArticleWrite_submitFormDone = false;
+	function ArticleWrite_submitForm(form) {
+		if (ArticleWrite_submitFormDone) {
+			return;
+		}
+		
+		form.title.value = form.title.value.trim();
+		
+		if (form.title.value.length == 0) {
+			alert('제목을 작성해주세요.');
+			for.title.focus();
+			
+			return;
+		}
+		
+		form.body.value = for.body.value.trim();
+		
+		if (for.body.value.length == 0) {
+			alert('내용을 작성해주세요.');
+			form.body.focus();
+			
+			return;
+		}
+		form.submit();
+		ArticleWrite_submitFormDone = true;
+	}
+</script>
+
+
 <div class="section section-article-list">
 	<div class="container mx-auto">
-		<form method="POST" action="doWrite">
+		<form method="POST" action="doWrite" onsubmit="ArticleWrite_submitForm(this); return false;">
 			<div class="form-control">
 				<label class="label">
 					제목
@@ -25,11 +55,11 @@
 			</div>
 			
 			<div class="mt-4 btn-wrap gap-1">
-				<a href="#" class="btn btn-primary btn-sm mb-1">
+				<button type="submit" href="#" class="btn btn-primary btn-sm mb-1">
 					<span><i class="fas fa-save"></i></span>
 					&nbsp;
 					<span>작성</span>
-				</a>
+				</button>
 			</div>
 			
 			<div class="mt-4 btn-wrap gap-1">
