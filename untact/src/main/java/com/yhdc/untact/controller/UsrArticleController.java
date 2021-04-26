@@ -87,6 +87,20 @@ public class UsrArticleController {
 
 		return new ResultData("S-1", id + "번 글이 입니다.", "article", article);
 	}
+	
+	//SHOW
+	@RequestMapping("/usr/article/showwrite")
+	public String showWrite(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId) {
+		Board board = articleService.getBoardById(boardId);
+		
+		if (board == null) {
+			return msgAndBack(req, boardId + "번 게시판은 존제하지 않습니다.");
+		}
+		
+		req.setAttribute("board", board);
+		
+		return "usr/article/write";
+	}
 
 	// WRITE
 	@RequestMapping("/usr/article/write")
