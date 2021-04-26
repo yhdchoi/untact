@@ -1,13 +1,14 @@
 package com.yhdc.untact.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yhdc.untact.dto.Member;
+import com.yhdc.untact.dto.ResultData;
+import com.yhdc.untact.service.MemberService;
 import com.yhdc.untact.util.Util;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +17,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UsrMemberController {
 	
+	@Autowired
+	private MemberService memberService;
+	
 	@RequestMapping("/usr/member/join")
 	public String showJoin(HttpServletRequest req) {
 		return "usr/member/join";
 	}
 	
 	@RequestMapping("/usr/member/doJoin")
-	@ResponseBody
-	public Map doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNo, String email) {
-		return Util.mapOf("loginId", loginId, "loginPw", loginPw, "name", name, "nickname", nickname, "cellphoneNo", cellphoneNo, "email", email);
+		public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname, String cellphoneNo, String email) {
+		Member existingMember = memberService.getMemberByLoginId(loginId);
+		
+		if (existingMember != null) {
+			return Util.msgAndBack(req, loginId + "는 이미 사용중인 아이디 입니다.");
+		}	
+	
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNo, email);
+		
+		if (joinRd.isFail()) {
+			return Util.msgAndBack(req, joinRd.getMsg());		
+		}
+		
+		return Util.msgAndReplace(req, joinRd.getMsg(), "/");
 	}
 }

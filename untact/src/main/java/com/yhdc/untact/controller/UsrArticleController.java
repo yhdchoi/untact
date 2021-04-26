@@ -25,7 +25,6 @@ public class UsrArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
-
 	// LIST
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchType, String keyword, @RequestParam(defaultValue = "1") int page) {
