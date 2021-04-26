@@ -24,19 +24,7 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-
-	// RETURN MSG
-	private String msgAndBack(HttpServletRequest req, String msg) {
-		req.setAttribute("msg", msg);
-		req.setAttribute("historyBack", true);
-		return "common/redirect";
-	}
-
-	private String msgAndReplace(HttpServletRequest req, String msg, String replaceUrl) {
-		req.setAttribute("msg", msg);
-		req.setAttribute("replaceUrl", replaceUrl);
-		return "common/redirect";
-	}
+	
 
 	// LIST
 	@RequestMapping("/usr/article/list")
@@ -48,7 +36,7 @@ public class UsrArticleController {
 		}
 
 		if (board == null) {
-			return msgAndBack(req, boardId + "번 게시판이 존제하지 않습니다.");
+			return Util.msgAndBack(req, boardId + "번 게시판이 존제하지 않습니다.");
 		}
 
 		req.setAttribute("board", board);
@@ -56,7 +44,7 @@ public class UsrArticleController {
 		int totalItemsCount = articleService.getArticlesTotalCount(boardId, searchType, keyword);
 		
 		if (keyword == null || keyword.trim().length() == 0) {
-			return msgAndBack(req, "Keyword를 입력해주세요.");
+			return Util.msgAndBack(req, "Keyword를 입력해주세요.");
 		}
 		
 		req.setAttribute("totalItemsCount", totalItemsCount);
@@ -105,7 +93,7 @@ public class UsrArticleController {
 		Article article = articleService.getArticlePrintById(id);
 		
 		if (article == null) {
-			return msgAndBack(req, id + "번 게시물은 존제하지 않습니다.");
+			return Util.msgAndBack(req, id + "번 게시물은 존제하지 않습니다.");
 		}
 		
 		Board board = articleService.getBoardById(article.getBoardId());
@@ -122,7 +110,7 @@ public class UsrArticleController {
 		Board board = articleService.getBoardById(boardId);
 		
 		if (board == null) {
-			return msgAndBack(req, boardId + "번 게시판은 존제하지 않습니다.");
+			return Util.msgAndBack(req, boardId + "번 게시판은 존제하지 않습니다.");
 		}
 		
 		req.setAttribute("board", board);
@@ -136,11 +124,11 @@ public class UsrArticleController {
 
 		// CHECK INPUT
 		if (Util.isEmpty(title)) {
-			return msgAndBack(req, "제목을 작성해 주세요.");
+			return Util.msgAndBack(req, "제목을 작성해 주세요.");
 		}
 
 		if (Util.isEmpty(content)) {
-			return msgAndBack(req, "내용을 작성해 주세요.");
+			return Util.msgAndBack(req, "내용을 작성해 주세요.");
 		}
 		
 		int memberId = 3; //
@@ -148,11 +136,11 @@ public class UsrArticleController {
 		ResultData writeArticleRd = articleService.writeNewArticle(boardId, memberId, title, content);
 		
 		if (writeArticleRd.isFail()) {
-			return msgAndBack(req, writeArticleRd.getMsg());
+			return Util.msgAndBack(req, writeArticleRd.getMsg());
 		}
 		
 		String replaceUrl = "detail?id=" + writeArticleRd.getBody().get("id");
-		return msgAndReplace(req, writeArticleRd.getMsg(), replaceUrl);
+		return Util.msgAndReplace(req, writeArticleRd.getMsg(), replaceUrl);
 	}
 
 	// EDIT
@@ -182,18 +170,18 @@ public class UsrArticleController {
 
 		// CHECK INPUT
 		if (Util.isEmpty(id)) {
-			return msgAndBack(req, "게시물 ID를 입력해 주세요.");
+			return Util.msgAndBack(req, "게시물 ID를 입력해 주세요.");
 		}
 
 		ResultData rd = articleService.deleteArticleById(id);
 
 		if (rd.isFail()) {
-			return msgAndBack(req, rd.getMsg());
+			return Util.msgAndBack(req, rd.getMsg());
 		}
 
 		String redirectUrl = "../article/list?boardId=" + rd.getBody().get("boardId");
 
-		return msgAndReplace(req, rd.getMsg(), redirectUrl);
+		return Util.msgAndReplace(req, rd.getMsg(), redirectUrl);
 	}
 	
 
