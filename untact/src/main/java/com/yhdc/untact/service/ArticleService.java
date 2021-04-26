@@ -31,10 +31,8 @@ public class ArticleService {
 	}
 
 	// WRITE
-	public ResultData writeNewArticle(String title, String content) {
+	public ResultData writeNewArticle(int boardId, int memberId, String title, String content) {
 		int id = articleDao.getLastInsertId();
-		int boardId = 3; // fake data
-		int memberId = 3; // fake data
 
 		articleDao.writeNewArticle(boardId, memberId, title, content);
 		Article article = articleDao.getArticleById(id);

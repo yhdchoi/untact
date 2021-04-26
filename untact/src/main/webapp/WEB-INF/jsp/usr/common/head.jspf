@@ -65,6 +65,10 @@
 									</a></li>
 								</ul>
 							</div></li>
+						<li><a href="../article/write" class="h-full flex items-center px-5"> <span>
+									<i class="fas fa-newspaper"></i>
+							</span> <span class="hidden sm:block">&nbsp;WRITE</span>
+						</a></li>
 						<li><a href="#" class="h-full flex items-center px-5"> <span>
 									<i class="fas fa-sign-out-alt"></i>
 							</span> <span class="hidden md:block">&nbsp;SIGN OUT</span>

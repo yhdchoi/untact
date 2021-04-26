@@ -40,6 +40,7 @@
 <div class="section section-article-list">
 	<div class="container mx-auto">
 		<form method="POST" action="doWrite" onsubmit="ArticleWrite_submitForm(this); return false;">
+			<input type="hidden" name="boardId" value="${board.id}" />
 			<div class="form-control">
 				<label class="label">
 					제목

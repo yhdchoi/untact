@@ -16,7 +16,10 @@ import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.service.ArticleService;
 import com.yhdc.untact.util.Util;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class UsrArticleController {
 
 	@Autowired
@@ -39,6 +42,10 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchType, String keyword, @RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoardById(boardId);
+		
+		if (Util.isEmpty(searchType)) {
+			searchType = "titleAndBody";
+		}
 
 		if (board == null) {
 			return msgAndBack(req, boardId + "번 게시판이 존제하지 않습니다.");
@@ -47,6 +54,10 @@ public class UsrArticleController {
 		req.setAttribute("board", board);
 		
 		int totalItemsCount = articleService.getArticlesTotalCount(boardId);
+		
+//		if (keyword == null || keyword.trim().length() == 0) {
+//			return msgAndBack(req, "Keyword를 입력해주세요.");
+//		}
 		
 		req.setAttribute("totalItemsCount", totalItemsCount);
 		
@@ -88,8 +99,25 @@ public class UsrArticleController {
 		return new ResultData("S-1", id + "번 글이 입니다.", "article", article);
 	}
 	
-	//SHOW
-	@RequestMapping("/usr/article/showwrite")
+	//DETAIL
+	@RequestMapping("/usr/article/detail")
+	public String showDeatil(HttpServletRequest req, @RequestParam(defaultValue = "1") int id) {
+		Article article = articleService.getArticleById(id);
+		
+		if (article == null) {
+			return msgAndBack(req, id + "번 게시물은 존제하지 않습니다.");
+		}
+		
+		Board board = articleService.getBoardById(article.getBoardId());
+		
+		req.setAttribute("article", article);
+		req.setAttribute("board", board);
+		
+		return "usr/article/detail";
+	}
+	
+	//SHOW WRITE
+	@RequestMapping("/usr/article/write")
 	public String showWrite(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId) {
 		Board board = articleService.getBoardById(boardId);
 		
@@ -103,24 +131,32 @@ public class UsrArticleController {
 	}
 
 	// WRITE
-	@RequestMapping("/usr/article/write")
-	@ResponseBody
-	public ResultData doWrite(String title, String content) {
+	@RequestMapping("/usr/article/doWrite")
+	public String doWrite(HttpServletRequest req, int boardId, String title, String content) {
 
 		// CHECK INPUT
 		if (Util.isEmpty(title)) {
-			return new ResultData("F-1", "제목을 작성해 주세요.");
+			return msgAndBack(req, "제목을 작성해 주세요.");
 		}
 
 		if (Util.isEmpty(content)) {
-			return new ResultData("F-2", "내용을 작성해 주세요.");
+			return msgAndBack(req, "내용을 작성해 주세요.");
 		}
-
-		return articleService.writeNewArticle(title, content);
+		
+		int memberId = 3; //
+		
+		ResultData writeArticleRd = articleService.writeNewArticle(boardId, memberId, title, content);
+		
+		if (writeArticleRd.isFail()) {
+			return msgAndBack(req, writeArticleRd.getMsg());
+		}
+		
+		String replaceUrl = "detail?id=" + writeArticleRd.getBody().get("id");
+		return msgAndReplace(req, writeArticleRd.getMsg(), replaceUrl);
 	}
 
 	// EDIT
-	@RequestMapping("/usr/article/edit")
+	@RequestMapping("/usr/article/doEdit")
 	@ResponseBody
 	public ResultData doEdit(Integer id, String title, String content) {
 
@@ -141,7 +177,7 @@ public class UsrArticleController {
 	}
 
 	// DELETE
-	@RequestMapping("/usr/article/delete")
+	@RequestMapping("/usr/article/doDelete")
 	public String doDelete(HttpServletRequest req, Integer id) {
 
 		// CHECK INPUT
