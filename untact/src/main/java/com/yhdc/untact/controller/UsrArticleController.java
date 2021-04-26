@@ -51,7 +51,7 @@ public class UsrArticleController {
 		req.setAttribute("totalItemsCount", totalItemsCount);
 		
 		// MAX NUMBER OF POSTS IN A PAGE
-		int itemsInPage = 20;
+		int itemsInPage = 10;
 		// TOTAL NUMBER OF PAGE
 		int totalPage = (int) Math.ceil(totalItemsCount / (double) itemsInPage);
 		
