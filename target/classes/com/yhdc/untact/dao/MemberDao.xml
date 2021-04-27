@@ -6,14 +6,14 @@
 <mapper namespace="com.yhdc.untact.dao.MemberDao">
 	<select id="getMemberByLoginId" resultType="Member">
 		SELECT *
-		FROM 'member' AS M
+		FROM member AS M
 		WHERE M.loginId = #{loginId}
 		AND M.delStatus = 0
 	</select>
 	
 	<select id="getMemberById" resultType="Member">
 		SELECT *
-		FROM 'member' AS M
+		FROM member AS M
 		WHERE M.id = #{id}
 		AND M.delStatus = 0
 	</select>
@@ -23,7 +23,7 @@
 	</select>
 	
 	<insert id="join">
-		INSERT INTO 'member'
+		INSERT INTO member
 		SET regDate = NOW(),
 		updateDate = NOW(),
 		loginId = #{loginId},

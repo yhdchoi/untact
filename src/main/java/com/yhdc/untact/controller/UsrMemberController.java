@@ -46,6 +46,16 @@ public class UsrMemberController {
 		return Util.msgAndReplace(req,  msg, redirectUrl);
 	}
 	
+	//LOGOUT
+	@RequestMapping("/usr/member/doLogout")
+	public String doLogout(HttpServletRequest req, HttpSession session) {
+		session.removeAttribute("loggedInMemberId");
+		
+		String msg = "로그아웃 되었습니다.";
+		return Util.msgAndReplace(req, msg, "/");
+	}
+	
+	
 	//JOIN
 	@RequestMapping("/usr/member/join")
 	public String showJoin(HttpServletRequest req) {
