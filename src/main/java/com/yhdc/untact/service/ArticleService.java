@@ -16,12 +16,10 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 
-	// GET
 	public Article getArticleById(int id) {
 		return articleDao.getArticleById(id);
 	}
 	
-	// LIST
 	public Board getBoardById(int id) {
 		return articleDao.getBoardById(id);
 	}
@@ -44,12 +42,11 @@ public class ArticleService {
 		return articleDao.getPrintArticles(boardId, searchType, keyword, limitFrom, limitTake);
 	}
 	
-	
-	//DETAIL
 	public Article getArticlePrintById(int id) {
 		return articleDao.getArticlePrintById(id);
 	}
 
+	
 	// WRITE
 	public ResultData writeNewArticle(int boardId, int memberId, String title, String content) {
 		int id = articleDao.getLastInsertId();
@@ -73,7 +70,7 @@ public class ArticleService {
 		return new ResultData("S-1", id + "번 글이 수정되었습니다.", "id", id);
 	}
 
-	// CHECK ARTICLE
+	// CHECK
 	private boolean isEmpty(Article article) {
 		if (article == null) {
 			return true;

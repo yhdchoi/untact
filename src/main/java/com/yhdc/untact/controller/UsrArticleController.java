@@ -49,7 +49,7 @@ public class UsrArticleController {
 
 		req.setAttribute("totalItemsCount", totalItemsCount);
 
-		// MAX NUMBER OF POSTS IN A PAGE
+		// MAX NUMBER OF POSTS ON A PAGE
 		int itemsInPage = 20;
 
 		// TOTAL NUMBER OF PAGE
@@ -67,9 +67,9 @@ public class UsrArticleController {
 	}
 
 	// GET
-	@RequestMapping("/usr/article/get")
+	@RequestMapping("/usr/article/getArticle")
 	@ResponseBody
-	public ResultData doGet(Integer id) {
+	public ResultData getArticle(Integer id) {
 
 		// CHECK INPUT
 		if (Util.isEmpty(id)) {

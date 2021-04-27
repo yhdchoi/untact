@@ -5,23 +5,6 @@
 
 <mapper namespace="com.yhdc.untact.dao.ArticleDao">
 
-	<select id="getArticleById" resultType="Article">
-		SELECT *
-		FROM article AS A
-		WHERE A.id = #{id}
-		AND A.delStatus = 0
-	</select>
-	
-	<select id="getLastInsertId" resultType="int">
-		SELECT LAST_INSERT_ID()
-	</select>
-	
-	<select id="getBoardById" resultType="Board">
-		SELECT *
-		FROM board AS B
-		WHERE B.id = #{id}		
-		AND B.delStatus = 0		
-	</select>
 	
 	<select id="getArticlesTotalCount" resultType="int">
 		SELECT COUNT(*) AS cnt
@@ -65,8 +48,23 @@
 			</if>
 		</if>
 		ORDER BY A.id DESC
-		LIMIT #{limitFrom}, #{limitTake};
-	</select>	
+		LIMIT #{limitFrom}, #{limitTake};	
+	</select>
+		
+	<select id="getArticleById" resultType="Article">
+		SELECT *
+		FROM article AS A
+		WHERE A.id = #{id}
+		AND A.delStatus = 0
+	</select>
+	
+	
+	<select id="getBoardById" resultType="Board">
+		SELECT *
+		FROM board AS B
+		WHERE B.id = #{id}		
+		AND B.delStatus = 0		
+	</select>
 	
 	<select id="getArticlePrintById" resultType="Article">
 		SELECT A.*,
@@ -78,6 +76,10 @@
 		AND A.delStatus = 0
 	</select>
 
+	<select id="getLastInsertId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+	
 	<update id="editArticle">
 		UPDATE article
 		SET updateDate = NOW(),

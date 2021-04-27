@@ -1,9 +1,7 @@
-# DB 생성
 DROP DATABASE IF EXISTS insta;
 CREATE DATABASE insta;
 USE insta;
 
-# 게시물 테이블 생성
 CREATE TABLE article (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '번호',
     regDate DATETIME NOT NULL COMMENT '작성날짜',
@@ -22,8 +20,6 @@ CREATE TABLE article (
     dislikeCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요수'
 );
 
-# 게시물 테스트 데이터 생성
-## 1번회원이 1번 게시판에 1번글 작성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -32,7 +28,6 @@ memberId = 1,
 title = '제목1',
 content = '본문1';
 
-## 1번회원이 1번 게시판에 2번글 작성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -41,7 +36,6 @@ memberId = 1,
 title = '제목2',
 content = '본문2';
 
-## 1번회원이 1번 게시판에 3번글 작성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -50,7 +44,6 @@ memberId = 1,
 title = '제목3',
 content = '본문3';
 
-## 2번회원이 1번 게시판에 4번글 작성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -59,7 +52,6 @@ memberId = 2,
 title = '제목4',
 content = '본문4';
 
-## 2번회원이 2번 게시판에 5번글 작성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -68,7 +60,6 @@ memberId = 2,
 title = '제목5',
 content = '본문5';
 
-## 2번회원이 2번 게시판에 6번글 작성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -77,7 +68,80 @@ memberId = 2,
 title = '제목6',
 content = '본문6';
 
-# 게시판 테이블 생성
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 2,
+memberId = 2,
+title = '제목7',
+content = '본문7';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 2,
+memberId = 2,
+title = '제목8',
+content = '본문8';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 1,
+memberId = 1,
+title = '제목10',
+content = '본문10';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 2,
+memberId = 1,
+title = '제목11',
+content = '본문11';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 1,
+memberId = 2,
+title = '제목12',
+content = '본문12';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 1,
+memberId = 1,
+title = '제목',
+content = '본문';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 2,
+memberId = 2,
+title = '제목',
+content = '본문';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 1,
+memberId = 3,
+title = '제목',
+content = '본문';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 2,
+memberId = 1,
+title = '제목',
+content = '본문';
+
+
+
 CREATE TABLE board (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '번호',
     regDate DATETIME NOT NULL COMMENT '작성날짜',
@@ -94,15 +158,13 @@ CREATE TABLE board (
     dislikeCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요수'
 );
 
-# 게시판 테스트 데이터 생성
-## 공지사항 게시판 생성
+
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
 `name` = 'NOTICE',
 `code` = 'notice';
 
-## 자유 게시판 생성
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -110,7 +172,6 @@ updateDate = NOW(),
 `code` = 'free';
 
 
-# 회원 테이블 생성
 CREATE TABLE `member` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '번호',
     regDate DATETIME NOT NULL COMMENT '작성날짜',
@@ -125,8 +186,6 @@ CREATE TABLE `member` (
     delDate DATETIME COMMENT '탈퇴날짜'
 );
 
-# 회원 테스트 데이터 생성
-## 1번 회원 생성
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -134,11 +193,10 @@ loginId = 'user1',
 loginPw = 'user1',
 `name` = '유저1이름',
 nickname = '유저1별명',
-email = 'jangka512@gmail.com',
+email = 'yhdchoi@gmail.com',
 cellphoneNo = '01012341234';
 
-# 회원 테스트 데이터 생성
-## 2번 회원 생성
+
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -146,11 +204,10 @@ loginId = 'user2',
 loginPw = 'user2',
 `name` = '유저2이름',
 nickname = '유저2별명',
-email = 'jangka512@gmail.com',
+email = 'yhdchoi@gmail.com',
 cellphoneNo = '01012341234';
 
-# 회원 테스트 데이터 생성
-## 3번 회원 생성
+
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -158,5 +215,5 @@ loginId = 'user3',
 loginPw = 'user3',
 `name` = '유저3이름',
 nickname = '유저3별명',
-email = 'jangka512@gmail.com',
+email = 'yhdchoi@gmail.com',
 cellphoneNo = '01012341234';

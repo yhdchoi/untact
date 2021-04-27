@@ -42,32 +42,32 @@
 						<li>
 							<a href="/" class="h-full flex items-center px-5">
 								<span> <i class="fas fa-home"></i>
-								</span> <span class="hidden sm:block">&nbsp;HOME</span>
+								</span> <span class="hidden sm:block">&nbsp;홈</span>
 							</a>
 						</li>
 						<li>
 							<a href="#" class="h-full flex items-center px-5">
 								<span> <i class="far fa-newspaper"></i>
-								</span> <span class="hidden md:block">&nbsp;BOARD</span>
+								</span> <span class="hidden md:block">&nbsp;게시판</span>
 							</a>
 							<div>
 								<h1>
 									<a href="../article/list">
 										<span> <i class="far fa-newspaper"></i>
-										</span> <span>&nbsp;ALL</span>
+										</span> <span>&nbsp;전체 게시판</span>
 									</a>
 								</h1>
 								<ul>
 									<li>
 										<a href="../article/list?boardId=1">
 											<span> <i class="far fa-clipboard"></i>
-											</span> <span>&nbsp;NOTICE</span>
+											</span> <span>&nbsp;공지 게시판</span>
 										</a>
 									</li>
 									<li>
 										<a href="../article/list?boardId=2">
 											<span> <i class="far fa-clipboard"></i>
-											</span> <span>&nbsp;FREE</span>
+											</span> <span>&nbsp;자유 게시판</span>
 										</a>
 									</li>
 								</ul>
@@ -80,7 +80,7 @@
 								<span> 
 									<i class="fas fa-sign-out-alt"></i>
 								</span> 
-								<span class="hidden md:block">&nbsp;LOGOUT</span>
+								<span class="hidden md:block">&nbsp;로그아웃</span>
 							</a>
 						</li>
 					    <li>
@@ -88,7 +88,7 @@
                                 <span>
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>
-                                <span class="hidden md:block">&nbsp;${rq.getLoggedInMemberNickname()}＇s MY PAGE</span>
+                                <span class="hidden md:block">&nbsp;${rq.getLoggedInMemberNickname()}님의 계정</span>
                             </a>
                         </li>
 						</c:if>
@@ -99,7 +99,7 @@
                                 <span>
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
-                                <span class="hidden md:block">&nbsp;LOGIN</span>
+                                <span class="hidden md:block">&nbsp;로그인</span>
                             </a>
                         </li>
                         <li>
@@ -107,7 +107,7 @@
                                 <span>
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
-                                <span class="hidden md:block">&nbsp;JOIN</span>
+                                <span class="hidden md:block">&nbsp;계정등록</span>
                             </a>
                         </li>
                         </c:if>						

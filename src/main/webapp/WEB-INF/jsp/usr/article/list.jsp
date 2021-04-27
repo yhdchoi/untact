@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="pageTitle"
-	value="<span><i class='far fa-clipboard'></i></span> <span>${board.name} BOARD</span>" />
+	value="<span><i class='far fa-clipboard'></i></span> <span>${board.name} LIST</span>" />
 
 <%@ include file="../common/head.jspf"%>
 
@@ -100,28 +100,29 @@
 				value="${page - pageMenuArmSize >= 1  ? page - pageMenuArmSize : 1}" />
 			<c:set var="endPage"
 				value="${page + pageMenuArmSize <= totalPage ? page + pageMenuArmSize : totalPage}" />
-			<c:set var="urlBase" value="?boardId=${board.id}" />
-			<c:set var="urlBase"
-				value="${urlBase}&searchType=${param.searchType}" />
-			<c:set var="urlBase"
-				value="${urlBase}&keyword=${param.keyword}" />
 
+			<c:set var="uriBase" value="?boardId=${board.id}" />
+			<c:set var="uriBase"
+				value="${uriBase}&searchType=${param.searchType}" />
+			<c:set var="uriBase"
+				value="${uriBase}&keyword=${param.keyword}" />
+				
 			<c:set var="aClassStr"
 				value="px-2 inline-block border border-gray-200 rounded text-lg hover:bg-gray-200" />
-			
+
 			<c:if test="${startPage > 1}">
-				<a class="${aClassStr}" href="${urlBase}&page=1">◀◀</a>
-				<a class="${aClassStr}" href="${urlBase}&page=${startPage - 1}">◀</a>
+				<a class="${aClassStr}" href="${uriBase}&page=1">◀◀</a>
+				<a class="${aClassStr}" href="${uriBase}&page=${startPage - 1}">◀</a>
 			</c:if>
-					
+
 			<c:forEach var="i" begin="${startPage}" end="${endPage}">
 				<a class="${aClassStr} ${page == i ? 'text-red-500' : ''}"
-					href="${urlBase}&page=${i}">${i}</a>
+					href="${uriBase}&page=${i}">${i}</a>
 			</c:forEach>
-			
+
 			<c:if test="${endPage < totalPage}">
-				<a class="${aClassStr}" href="${urlBase}&page=${endPage + 1}">▶</a>
-				<a class="${aClassStr}" href="${urlBase}&page=${totalPage}">▶▶</a>			
+				<a class="${aClassStr}" href="${uriBase}&page=${endPage + 1}">▶</a>
+				<a class="${aClassStr}" href="${uriBase}&page=${totalPage}">▶▶</a>
 			</c:if>	
 		</div>
 	</div>

@@ -11,22 +11,20 @@ import com.yhdc.untact.dto.Board;
 @Mapper
 public interface ArticleDao {
 
-	// GET
 	Article getArticleById(@Param("id") int id);
 
 	int getLastInsertId();
 
 	Board getBoardById(@Param("id") int id);
-
-	// DETAIL
-	Article getArticlePrintById(@Param("id") int id);
 	
-	//LIST
+	int getArticlesTotalCount(@Param("boardId") int boardId, @Param("searchType") String searchType,
+			@Param("keyword") String keyword);
+
 	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("searchType") String searchType,
 			@Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
-	int getArticlesTotalCount(@Param("boardId") int boardId, @Param("searchType") String searchType,
-			@Param("keyword") String keyword);
+	Article getArticlePrintById(@Param("id") int id);
+
 
 	// WRITE
 	void writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
