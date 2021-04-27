@@ -27,7 +27,7 @@
 		
 		if (for.body.value.length == 0) {
 			alert('내용을 작성해주세요.');
-			form.body.focus();
+			form.content.focus();
 			
 			return;
 		}

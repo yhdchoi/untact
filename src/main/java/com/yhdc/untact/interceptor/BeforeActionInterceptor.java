@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.yhdc.untact.dto.Member;
-import com.yhdc.untact.dto.Req;
+import com.yhdc.untact.dto.Rq;
 import com.yhdc.untact.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			loggedInMember = memberService.getMemberByLoginId("loggedInMemberId");
 		}
 		
-		req.setAttribute("req", new Req(loggedInMember));
+		req.setAttribute("rq", new Rq(loggedInMember));
 		
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
 	}

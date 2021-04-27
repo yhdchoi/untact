@@ -64,9 +64,9 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doJoin")
 		public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname, String cellphoneNo, String email) {
-		Member existingMember = memberService.getMemberByLoginId(loginId);
+		Member oldMember = memberService.getMemberByLoginId(loginId);
 		
-		if (existingMember != null) {
+		if (oldMember != null) {
 			return Util.msgAndBack(req, loginId + "는 이미 사용중인 아이디 입니다.");
 		}	
 	

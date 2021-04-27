@@ -13,14 +13,21 @@ public interface ArticleDao {
 
 	// GET
 	Article getArticleById(@Param("id") int id);
-	
+
 	int getLastInsertId();
 
 	Board getBoardById(@Param("id") int id);
-	
-	//DETAIL
+
+	// DETAIL
 	Article getArticlePrintById(@Param("id") int id);
 	
+	//LIST
+	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("searchType") String searchType,
+			@Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
+
+	int getArticlesTotalCount(@Param("boardId") int boardId, @Param("searchType") String searchType,
+			@Param("keyword") String keyword);
+
 	// WRITE
 	void writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
 			@Param("content") String content);
@@ -30,9 +37,5 @@ public interface ArticleDao {
 
 	// DELETE
 	void deleteArticleById(@Param("id") int id);
-
-	int getArticlesTotalCount(@Param("boardId") int boardId, @Param("searchType") String searchType, @Param("keyword") String keyword);
-
-	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("searchType") String searchType, @Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
 }

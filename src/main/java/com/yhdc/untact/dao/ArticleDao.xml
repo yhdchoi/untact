@@ -19,15 +19,29 @@
 	<select id="getBoardById" resultType="Board">
 		SELECT *
 		FROM board AS B
-		WHERE B.id = #{id}
-		AND B.delStatus = 0
-		
+		WHERE B.id = #{id}		
+		AND B.delStatus = 0		
 	</select>
 	
 	<select id="getArticlesTotalCount" resultType="int">
 		SELECT COUNT(*) AS cnt
 		FROM article AS A
 		WHERE A.boardId = #{boardId}
+		<if test="keyword != null">
+			<if test="searchType == 'titleAndContent'">
+				AND (
+				A.title LIKE CONCAT('%', #{keyword}, '%')
+				OR
+				A.content LIKE CONCAT('%', #{keyword}, '%')
+				)
+			</if>
+			<if test="searchType == 'title'">
+				AND A.title LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'content'">
+				AND A.content LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</if>
 		AND A.delStatus = 0
 	</select>
 	
@@ -35,20 +49,23 @@
 		SELECT *
 		FROM article AS A
 		WHERE A.boardId = #{boardId}
-		<if test= "searchType == 'titleAndContent'">
-		AND	(		
-		A.title LIKE CONCAT ('%',#{keyword},'%')
-		OR A.content LIKE CONCAT ('%',#{keyword},'%')
-		)
-		</if>
-		<if test="searchType == 'title'">
-		AND	A.title LIKE CONCAT ('%',#{keyword},'%')		
-		</if>
-		<if test="searchType == 'content'">
-		AND	A.content LIKE CONCAT ('%',#{keyword},'%')		
+		<if test="keyword != null">
+			<if test="searchType == 'titleAndContent'">
+				AND (
+				A.title LIKE CONCAT('%', #{keyword}, '%')
+				OR
+				A.content LIKE CONCAT('%', #{keyword}, '%')
+				)
+			</if>
+			<if test="searchType == 'title'">
+				AND A.title LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'content'">
+				AND A.content LIKE CONCAT('%', #{keyword}, '%')
+			</if>
 		</if>
 		ORDER BY A.id DESC
-		LIMIT #{limitFrom}, #{limitTake}
+		LIMIT #{limitFrom}, #{limitTake};
 	</select>	
 	
 	<select id="getArticlePrintById" resultType="Article">

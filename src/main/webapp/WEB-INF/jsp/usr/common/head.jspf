@@ -33,7 +33,7 @@
 			<div class="container mx-auto flex h-full">
 				<a href="/" class="px-3 flex items-center">
 					<span> <i class="fas fa-lemon"></i>
-					</span> <span class="hidden sm:block">&nbsp;INSTA</span>
+					</span> <span class="hidden sm:block">&nbsp;myBB</span>
 				</a>
 				<div class="flex-grow"></div>
 
@@ -54,7 +54,7 @@
 								<h1>
 									<a href="../article/list">
 										<span> <i class="far fa-newspaper"></i>
-										</span> <span>&nbsp;BOARD</span>
+										</span> <span>&nbsp;ALL</span>
 									</a>
 								</h1>
 								<ul>
@@ -74,7 +74,7 @@
 							</div>
 						</li>
 						
-						<c:if test="${req.isLoggedIn()}">
+						<c:if test="${rq.isLoggedIn()}">
 						<li>
 							<a href="../member/doLogout" class="h-full flex items-center px-5">
 								<span> 
@@ -88,12 +88,12 @@
                                 <span>
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>
-                                <span class="hidden md:block">&nbsp;${req.getLoggedInMemberNickname()}＇s MY PAGE</span>
+                                <span class="hidden md:block">&nbsp;${rq.getLoggedInMemberNickname()}＇s MY PAGE</span>
                             </a>
                         </li>
 						</c:if>
 						
-						<c:if test="${req.isNotLoggedIn()}">
+						<c:if test="${rq.isNotLoggedIn()}">
                         <li>
                             <a href="../member/login" class="h-full flex items-center px-5">
                                 <span>

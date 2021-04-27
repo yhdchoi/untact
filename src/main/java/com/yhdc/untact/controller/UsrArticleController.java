@@ -24,14 +24,16 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-	
+
 	// LIST
 	@RequestMapping("/usr/article/list")
-	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchType, String keyword, @RequestParam(defaultValue = "1") int page) {
+	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchType,
+			String keyword, @RequestParam(defaultValue = "1") int page) {
+
 		Board board = articleService.getBoardById(boardId);
-		
+
 		if (Util.isEmpty(searchType)) {
-			searchType = "titleAndBody";
+			searchType = "titleAndContent";
 		}
 
 		if (board == null) {
@@ -39,30 +41,28 @@ public class UsrArticleController {
 		}
 
 		req.setAttribute("board", board);
-		
+
 		int totalItemsCount = articleService.getArticlesTotalCount(boardId, searchType, keyword);
-		
+
 		if (keyword == null || keyword.trim().length() == 0) {
-			return Util.msgAndBack(req, "Keyword를 입력해주세요.");
 		}
-		
+
 		req.setAttribute("totalItemsCount", totalItemsCount);
-		
+
 		// MAX NUMBER OF POSTS IN A PAGE
-		int itemsInPage = 10;
+		int itemsInPage = 20;
+
 		// TOTAL NUMBER OF PAGE
 		int totalPage = (int) Math.ceil(totalItemsCount / (double) itemsInPage);
-		
+
 		// CURRENT PAGE (TEMP)
 		req.setAttribute("page", page);
 		req.setAttribute("totalPage", totalPage);
-		
+
 		List<Article> articles = articleService.getPrintArticles(boardId, searchType, keyword, itemsInPage, page);
-		
-		System.out.println("articles : " + articles);
-		
+
 		req.setAttribute("articles", articles);
-		
+
 		return "usr/article/list";
 	}
 
@@ -85,35 +85,36 @@ public class UsrArticleController {
 
 		return new ResultData("S-1", id + "번 글이 입니다.", "article", article);
 	}
-	
-	//DETAIL
+
+	// DETAIL
 	@RequestMapping("/usr/article/detail")
-	public String showDeatil(HttpServletRequest req, @RequestParam(defaultValue = "1") int id) {
+	public String showDeatil(HttpServletRequest req, int id) {
 		Article article = articleService.getArticlePrintById(id);
-		
+
 		if (article == null) {
 			return Util.msgAndBack(req, id + "번 게시물은 존제하지 않습니다.");
 		}
-		
+
 		Board board = articleService.getBoardById(article.getBoardId());
-		
+
 		req.setAttribute("article", article);
 		req.setAttribute("board", board);
-		
+
 		return "usr/article/detail";
 	}
-	
-	//SHOW WRITE
+
+	// SHOW WRITE
 	@RequestMapping("/usr/article/write")
 	public String showWrite(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId) {
+
 		Board board = articleService.getBoardById(boardId);
-		
+
 		if (board == null) {
 			return Util.msgAndBack(req, boardId + "번 게시판은 존제하지 않습니다.");
 		}
-		
+
 		req.setAttribute("board", board);
-		
+
 		return "usr/article/write";
 	}
 
@@ -129,15 +130,15 @@ public class UsrArticleController {
 		if (Util.isEmpty(content)) {
 			return Util.msgAndBack(req, "내용을 작성해 주세요.");
 		}
-		
-		int memberId = 3; //
-		
+
+		int memberId = 3; // TEMP
+
 		ResultData writeArticleRd = articleService.writeNewArticle(boardId, memberId, title, content);
-		
+
 		if (writeArticleRd.isFail()) {
 			return Util.msgAndBack(req, writeArticleRd.getMsg());
 		}
-		
+
 		String replaceUrl = "detail?id=" + writeArticleRd.getBody().get("id");
 		return Util.msgAndReplace(req, writeArticleRd.getMsg(), replaceUrl);
 	}
@@ -158,6 +159,12 @@ public class UsrArticleController {
 
 		if (Util.isEmpty(content)) {
 			return new ResultData("F-3", "내용을 작성해 주세요.");
+		}
+
+		Article article = articleService.getArticleById(id);
+
+		if (article == null) {
+			return new ResultData("F-4", "존재하지 않는 게시물 번호입니다.");
 		}
 
 		return articleService.editArticle(id, title, content);
@@ -182,6 +189,5 @@ public class UsrArticleController {
 
 		return Util.msgAndReplace(req, rd.getMsg(), redirectUrl);
 	}
-	
 
 }
