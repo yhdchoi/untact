@@ -1,6 +1,7 @@
 package com.yhdc.untact.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,32 @@ public class UsrMemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	//LOGIN
+	@RequestMapping("/usr/member/login")
+	public String showLOgin(HttpServletRequest req) {
+		return "usr/member/login";
+	}
+	
+	@RequestMapping("/usr/member/doLogin")
+	public String doLogin(HttpServletRequest req, HttpSession session, String loginId, String loginPw, String redirectUrl) {
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if (member == null) {
+			return Util.msgAndBack(req, loginId + "는 존재하지 않는 아이디 입니다.");
+		}
+		
+		if (member.getLoginPw().equals(loginPw) == false) {
+			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니.");
+		}
+		
+		//HttpSession session = req.getSession(); 
+		session.setAttribute("loggedInMemberId", member.getId());
+		
+		String msg = "환영합니다.";
+		return Util.msgAndReplace(req,  msg, redirectUrl);
+	}
+	
+	//JOIN
 	@RequestMapping("/usr/member/join")
 	public String showJoin(HttpServletRequest req) {
 		return "usr/member/join";
