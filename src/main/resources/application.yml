@@ -1,6 +1,17 @@
 server:
   port: 8080
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lilmonster8312@gmail.com
+    password: glg83phatdc7
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   mvc:
     view:
       prefix: /WEB-INF/jsp/
@@ -13,6 +24,10 @@ spring:
 mybatis:
   type-aliases-package: com.yhdc.untact.dto
 custom:
+  siteMainUri: http://localhost:8024/
+  siteName: untact
+  emailFrom: no-reply@localhost
+  emailFromName: untactBot
   logging:
     dir: log
     level: debug
