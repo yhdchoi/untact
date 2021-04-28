@@ -93,7 +93,7 @@
                         </li>
 						</c:if>
 						
-						<c:if test="${rq.notLoggedIn()}">
+						<c:if test="${rq.notLoggedIn}">
                         <li>
                             <a href="${rq.loginPageUri}" class="h-full flex items-center px-5">
                                 <span>

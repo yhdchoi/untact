@@ -110,20 +110,20 @@ public class Util {
 		return "";
 	}
 
-	public static Map<String, Object> getParamMap(HttpServletRequest request) {
-		Map<String, Object> param = new HashMap<>();
+	public static Map<String, String> getParamMap(HttpServletRequest request) {
+        Map<String, String> param = new HashMap<>();
 
-		Enumeration<String> parameterNames = request.getParameterNames();
+        Enumeration<String> parameterNames = request.getParameterNames();
 
-		while (parameterNames.hasMoreElements()) {
-			String paramName = parameterNames.nextElement();
-			Object paramValue = request.getParameter(paramName);
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            String paramValue = request.getParameter(paramName);
 
-			param.put(paramName, paramValue);
-		}
+            param.put(paramName, paramValue);
+        }
 
-		return param;
-	}
+        return param;
+    }
 
 	public static String getUriEncoded(String str) {
 		try {

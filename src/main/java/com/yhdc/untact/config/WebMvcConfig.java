@@ -34,18 +34,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/usr/article/write")
 				.addPathPatterns("/usr/article/doWrite")
 				.addPathPatterns("/usr/article/doDelete")
-				.addPathPatterns("/usr/article/modify")
-				.addPathPatterns("/usr/article/doModify");
+				.addPathPatterns("/usr/article/edit")
+				.addPathPatterns("/usr/article/doEdit");
 		
 		registry.addInterceptor(needToLogoutInterceptor)
-				.addPathPatterns("/usr/member/login")
-				.addPathPatterns("/usr/member/doLogin")
-				.addPathPatterns("/usr/member/join")
-				.addPathPatterns("/usr/member/doJoin")
-				.addPathPatterns("/usr/member/findLoginId")
-				.addPathPatterns("/usr/member/doFindLoginId")
-				.addPathPatterns("/usr/member/findLoginPw")
-				.addPathPatterns("/usr/member/doFindLoginPw");
+				.addPathPatterns("/mpaUsr/member/findLoginId")
+		        .addPathPatterns("/mpaUsr/member/doFindLoginId")
+		        .addPathPatterns("/mpaUsr/member/findLoginPw")
+		        .addPathPatterns("/mpaUsr/member/doFindLoginPw")
+		        .addPathPatterns("/mpaUsr/member/login")
+		        .addPathPatterns("/mpaUsr/member/doLogin")
+		        .addPathPatterns("/mpaUsr/member/join")
+		        .addPathPatterns("/mpaUsr/member/doJoin")
+		        .addPathPatterns("/mpaUsr/member/findLoginId")
+		        .addPathPatterns("/mpaUsr/member/doFindLoginId")
+		        .addPathPatterns("/mpaUsr/member/findLoginPw")
+		        .addPathPatterns("/mpaUsr/member/doFindLoginPw");
 	}
 		
 }

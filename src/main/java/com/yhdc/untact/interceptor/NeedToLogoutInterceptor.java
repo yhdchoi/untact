@@ -23,6 +23,7 @@ public class NeedToLogoutInterceptor implements HandlerInterceptor {
 			resp.getWriter().append(Util.msgAndBack("로그아웃 후 이용해주세요."));
 			return false;
 		}
+		
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
 	}
 }

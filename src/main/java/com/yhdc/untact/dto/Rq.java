@@ -1,57 +1,61 @@
 package com.yhdc.untact.dto;
 
+import java.util.Map;
+
 import com.yhdc.untact.util.Util;
 
 public class Rq {
-	private Member loggedInMember;
-	private String currentUri;
-	
-	public Rq(Member loggedInMember, String currentUri) {
-		this.loggedInMember = loggedInMember; 
-		this.currentUri = currentUri.split("\\?")[0];
-		this.currentUri = currentUri;
-	}
-	
-	public boolean isLoggedIn() {
-		return loggedInMember != null;
-	}
-	
-	public boolean isNotLoggedIn() {
-		return isLoggedIn() == false;
-	}
-	
-	public int getLoggedInMemberId() {
-		if (isNotLoggedIn()) return 0;
-		
-		return loggedInMember.getId();
-	}
-	
-	public Member getLoggedInMember() {
-		return loggedInMember;
-	}
-	
+	private String currentUrl;
+    private String currentUri;
+    private Member loggedInMember;
+    private Map<String, String> paramMap;
 
-	private String getCurrentUri() {
-		return currentUri;
-	}
-	
-	public String getEncodedCurrentUri() {
-		return Util.getUriEncoded(getCurrentUri());
-	}
-	
-	private boolean isLoginPage() {
-		return currentUri.equals("/usr/member/login");
-	}
-	
-	public String getLoginPageUri() {
-		String afterLoginUri;
-		
-		if(isLoginPage()) {
-			afterLoginUri = "";			
-		} else {
-			afterLoginUri = getEncodedCurrentUri();
-		}
-		
-		return "../member/login?afterLoginUri=" + afterLoginUri;
-	}
+    public Rq(Member loggedInMember, String currentUri, Map<String, String> paramMap) {
+        this.loggedInMember = loggedInMember;
+        this.currentUrl = currentUri.split("\\?")[0];
+        this.currentUri = currentUri;
+        this.paramMap = paramMap;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedInMember != null;
+    }
+
+    public boolean isNotLoggedIn() {
+        return isLoggedIn() == false;
+    }
+
+    public int getLoggedInMemberId() {
+        if (isNotLoggedIn()) return 0;
+
+        return loggedInMember.getId();
+    }
+
+    public Member getLoggedInMember() {
+        return loggedInMember;
+    }
+
+    public String getEncodedCurrentUri() {
+        return Util.getUriEncoded(getCurrentUri());
+    }
+
+    private String getCurrentUri() {
+        return currentUri;
+    }
+
+    public String getLoginPageUri() {
+        String afterLoginUri;
+
+        if (isLoginPage()) {
+            afterLoginUri = Util.getUriEncoded(paramMap.get("afterLoginUri"));
+        } else {
+            afterLoginUri = getEncodedCurrentUri();
+        }
+
+        return "../member/login?afterLoginUri=" + afterLoginUri;
+    }
+
+    private boolean isLoginPage() {
+        return currentUrl.equals("/mpaUsr/member/login");
+    }
 }
