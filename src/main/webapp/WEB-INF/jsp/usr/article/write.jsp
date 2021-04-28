@@ -37,7 +37,7 @@
 </script>
 
 
-<div class="section section-article-list">
+<div class="section section-article-write">
 	<div class="container mx-auto">
 		<form method="POST" action="doWrite" onsubmit="ArticleWrite_submitForm(this); return false;">
 			<input type="hidden" name="boardId" value="${board.id}" />

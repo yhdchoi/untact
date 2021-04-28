@@ -30,11 +30,7 @@ public class Rq {
 		return loggedInMember;
 	}
 	
-	public String getLoggedInMemberNuckname() {
-		if (isNotLoggedIn()) return "";
-		return loggedInMember.getNickname();
-	}
-	
+
 	private String getCurrentUri() {
 		return currentUri;
 	}

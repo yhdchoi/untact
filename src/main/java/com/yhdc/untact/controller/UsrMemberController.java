@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.yhdc.untact.dto.Member;
 import com.yhdc.untact.dto.ResultData;
+import com.yhdc.untact.dto.Rq;
 import com.yhdc.untact.service.MemberService;
 import com.yhdc.untact.util.Util;
 
@@ -20,6 +21,12 @@ public class UsrMemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	//MYPAGE
+	@RequestMapping("/mpaUsr/member/mypage")
+    public String showMypage(HttpServletRequest req) {
+        return "mpaUsr/member/mypage";
+    }
 	
 	//LOGIN
 	@RequestMapping("/usr/member/login")
@@ -135,4 +142,45 @@ public class UsrMemberController {
 		
 		return Util.msgAndReplace(req, notifyTempLoginPwByEmailRs.getMsg(), redirectUri);
 	}
+	
+	//EDIT
+	@RequestMapping("/mpaUsr/member/edit")
+    public String showEdit(HttpServletRequest req) {
+        return "mpaUsr/member/modify";
+    }
+
+    @RequestMapping("/mpaUsr/member/doEdit")
+    public String doEdit(HttpServletRequest req, String loginPw, String name, String
+            nickname, String cellphoneNo, String email) {
+
+        if ( loginPw != null && loginPw.trim().length() == 0 ) {
+            loginPw = null;
+        }
+
+        int id = ((Rq) req.getAttribute("rq")).getLoggedInMemberId();
+        ResultData modifyRd = memberService.edit(id, loginPw, name, nickname, cellphoneNo, email);
+
+        if (modifyRd.isFail()) {
+            return Util.msgAndBack(req, modifyRd.getMsg());
+        }
+
+        return Util.msgAndReplace(req, modifyRd.getMsg(), "/");
+    }
+    
+    //CHECK PASSWORD
+    @RequestMapping("/mpaUsr/member/checkPassword")
+    public String showCheckPassword(HttpServletRequest req) {
+        return "mpaUsr/member/checkPassword";
+    }
+
+    @RequestMapping("/mpaUsr/member/doCheckPassword")
+    public String doCheckPassword(HttpServletRequest req, String loginPw, String redirectUri) {
+        Member loginedMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
+
+        if (loginedMember.getLoginPw().equals(loginPw) == false) {
+            return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
+        }
+
+        return Util.msgAndReplace(req, "", redirectUri);
+    }
 }

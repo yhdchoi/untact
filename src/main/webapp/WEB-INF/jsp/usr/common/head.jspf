@@ -88,14 +88,14 @@
                                 <span>
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>
-                                <span class="hidden md:block">&nbsp;${rq.getLoggedInMemberNickname()}님의 계정</span>
+                                <span class="hidden md:block">&nbsp;${rq.loggedInMember.nickname}님의 계정</span>
                             </a>
                         </li>
 						</c:if>
 						
-						<c:if test="${rq.isNotLoggedIn()}">
+						<c:if test="${rq.notLoggedIn()}">
                         <li>
-                            <a href="${rq.getLoginPageUri()}" class="h-full flex items-center px-5">
+                            <a href="${rq.loginPageUri}" class="h-full flex items-center px-5">
                                 <span>
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
