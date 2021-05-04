@@ -81,7 +81,7 @@ public class UsrMemberController {
 		
 		if (oldMember != null) {
 			return Util.msgAndBack(req, loginId + "는 이미 사용중인 아이디 입니다.");
-		}	
+		}
 	
 		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNo, email);
 		
@@ -92,7 +92,7 @@ public class UsrMemberController {
 		return Util.msgAndReplace(req, joinRd.getMsg(), "/");
 	}
 	
-	//FIND
+	//FIND LOGIN ID
 	@RequestMapping("/usr/member/findLoginId")
 	public String showFindLoginId(HttpServletRequest req) {
 		return "usr/member/findLoginId";
@@ -113,6 +113,7 @@ public class UsrMemberController {
 		return Util.msgAndBack(req, String.format("회원님의 아이디는 '%s' 입니다.", member.getLoginId()));			
 	}
 	
+	//FIND LOGIN PASSWORD
 	@RequestMapping("/usr/member/findLoginPw")
 	public String showFindLoginPw(HttpServletRequest req) {
 		return "/usr/member/findLoginPw";
@@ -143,9 +144,20 @@ public class UsrMemberController {
 		return Util.msgAndReplace(req, notifyTempLoginPwByEmailRs.getMsg(), redirectUri);
 	}
 	
-	//EDIT
+	//EDIT USER
 	@RequestMapping("/mpaUsr/member/edit")
-    public String showEdit(HttpServletRequest req) {
+    public String showEdit(HttpServletRequest req, String modifyPrivateAuthCode) {
+		
+		Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
+		
+		ResultData checkVMPAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), modifyPrivateAuthCode);
+		
+		if (checkVMPAuthCodeRD.isFail()) {
+			return Util.msgAndBack(req, checkVMPAuthCodeRD.getMsg());
+		}
+		
+		log.debug("checkVMPAuthCodeRd : " + checkVMPAuthCodeRD);
+		
         return "mpaUsr/member/modify";
     }
 

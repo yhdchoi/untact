@@ -12,6 +12,9 @@ import com.yhdc.untact.util.Util;
 @Service
 public class MemberService {
 	
+	@Autowired
+	private AttrService attrService;
+	
     @Autowired
     private MailService mailService;
 
@@ -70,4 +73,11 @@ public class MemberService {
 
         return new ResultData("S-1", "회원정보가 수정되었습니다.", "id", id);
     }
+
+	public ResultData checkVMPAuthCodeRD(int actorId, String checkPasswordAuthCode) {
+		if (attrService.getValue("member__" + actorId + "__extra__modifyPrivateAuthCode").equals(checkPasswordAuthCode)) {
+			return new ResultData("S-1", "유효한 키 입니다.");
+		}
+		return new ResultData("S-1", "유효하지 않은 키 입니다.");
+	}
 }

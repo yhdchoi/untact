@@ -15,10 +15,7 @@ import com.yhdc.untact.dto.Rq;
 import com.yhdc.untact.service.MemberService;
 import com.yhdc.untact.util.Util;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Component
-@Slf4j
 public class BeforeActionInterceptor implements HandlerInterceptor {
     @Autowired
     private MemberService memberService;

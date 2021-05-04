@@ -16,10 +16,7 @@ import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.service.ArticleService;
 import com.yhdc.untact.util.Util;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
-@Slf4j
 public class UsrArticleController {
 
 	@Autowired
