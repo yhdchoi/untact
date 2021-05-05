@@ -97,6 +97,16 @@ public class Util {
 
 		return sb.toString();
 	}
+	
+	public static String toJsonStr(Object obj) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(obj);
+		}catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
 
 	public static String toJsonStr(Map<String, Object> param) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -107,6 +117,16 @@ public class Util {
 		}
 
 		return "";
+	}
+	
+	public static <T> T fromJsonStr(String jsonStr, Class<T> cls) {
+		ObjectMapper om = new ObjectMapper();
+		try {
+			return (T) om.readValue(jsonStr, cls);
+		}catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static Map<String, String> getParamMap(HttpServletRequest request) {

@@ -52,8 +52,8 @@ public class UsrMemberController {
 			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니.");
 		}
 
-		// HttpSession session = req.getSession();
 		session.setAttribute("loggedInMemberId", member.getId());
+		session.setAttribute("loggedInMemberJsonStr", member.toJsonStr());
 
 		String msg = "환영합니다.";
 

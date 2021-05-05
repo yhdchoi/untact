@@ -4,17 +4,22 @@ import java.util.Map;
 
 import com.yhdc.untact.util.Util;
 
+import lombok.Getter;
+
 public class Rq {
 	private String currentUrl;
     private String currentUri;
     private Member loggedInMember;
     private Map<String, String> paramMap;
+    @Getter
+    private boolean needToChangePassword;
 
-    public Rq(Member loggedInMember, String currentUri, Map<String, String> paramMap) {
+    public Rq(Member loggedInMember, String currentUri, Map<String, String> paramMap, boolean needToChangePassword) {
         this.loggedInMember = loggedInMember;
         this.currentUrl = currentUri.split("\\?")[0];
         this.currentUri = currentUri;
         this.paramMap = paramMap;
+        this.needToChangePassword = needToChangePassword;
     }
 
     public boolean isLoggedIn() {
