@@ -1,5 +1,7 @@
 package com.yhdc.untact.dto;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,7 +23,7 @@ public class Article {
     private int repliesCount;
     private int likeCount;
     private int dislikeCount;
-    
+    private Map<String, Object> extra;
     private String extra_writerName;
     
     public String getContentForPrint() {
