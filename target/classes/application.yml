@@ -24,6 +24,7 @@ spring:
 mybatis:
   type-aliases-package: com.yhdc.untact.dto
 custom:
+  needToChangePassFreeDays: 50
   siteMainUri: http://localhost:8080/
   siteName: untact
   emailFrom: no-reply@localhost

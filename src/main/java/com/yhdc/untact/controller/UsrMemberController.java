@@ -18,209 +18,212 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 public class UsrMemberController {
-	
+
 	@Autowired
 	private MemberService memberService;
-	
-	//MYPAGE
+
+	// MYPAGE
 	@RequestMapping("/mpaUsr/member/mypage")
-    public String showMypage(HttpServletRequest req) {
-        return "mpaUsr/member/mypage";
-    }
-	
-	//LOGIN
+	public String showMypage(HttpServletRequest req) {
+		return "mpaUsr/member/mypage";
+	}
+
+	// LOGIN
 	@RequestMapping("/usr/member/login")
 	public String showLOgin(HttpServletRequest req) {
 		return "usr/member/login";
 	}
-	
+
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(HttpServletRequest req, HttpSession session, 
-			String loginId, String loginPw, String redirectUri) {
-		
+	public String doLogin(HttpServletRequest req, HttpSession session, String loginId, String loginPw,
+			String redirectUri) {
+
 		if (Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
 		}
-		
+
 		Member member = memberService.getMemberByLoginId(loginId);
-		
+
 		if (member == null) {
 			return Util.msgAndBack(req, loginId + "는 존재하지 않는 아이디 입니다.");
 		}
-		
+
 		if (member.getLoginPw().equals(loginPw) == false) {
 			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니.");
 		}
-		
-		//HttpSession session = req.getSession(); 
+
+		// HttpSession session = req.getSession();
 		session.setAttribute("loggedInMemberId", member.getId());
-		
+
 		String msg = "환영합니다.";
-		
-		boolean isUsingTempPassword = memberService.isUsingTempPassword(member.getId());
-		
-		if (isUsingTempPassword) {
-			msg = "임시 비밀번호를 벽경해주세요.";
+
+		boolean needToChangePassword = memberService.needToChangePassword(member.getId());
+
+		if (needToChangePassword) {
+			msg = "현재 비밀번호를 사용한지 " + memberService.getNeedToChangePassFreeDays() + "일이 지났습니다. 비밀번호를 변경해주세요.";
 			redirectUri = "/usr/member/mypage";
 		}
 		
-		return Util.msgAndReplace(req,  msg, redirectUri);
+		boolean isUsingTempPassword = memberService.UsingTempPassword(member.getId());
+		
+		if(isUsingTempPassword) {
+			msg = "임시 비밀번호를 변경해주세요.";
+            redirectUri = "/usr/member/mypage";
+		}
+
+		return Util.msgAndReplace(req, msg, redirectUri);
 	}
-	
-	//LOGOUT
+
+	// LOGOUT
 	@RequestMapping("/usr/member/doLogout")
 	public String doLogout(HttpServletRequest req, HttpSession session) {
 		session.removeAttribute("loggedInMemberId");
-		
+
 		String msg = "로그아웃 되었습니다.";
 		return Util.msgAndReplace(req, msg, "/");
 	}
-	
-	
-	//JOIN
+
+	// JOIN
 	@RequestMapping("/usr/member/join")
 	public String showJoin(HttpServletRequest req) {
 		return "usr/member/join";
 	}
-	
+
 	@RequestMapping("/usr/member/doJoin")
-	public String doJoin(HttpServletRequest req, String loginId, String loginPw, 
-			String name, String nickname, String cellphoneNo, String email) {
-		
+	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname,
+			String cellphoneNo, String email) {
+
 		Member oldMember = memberService.getMemberByLoginId(loginId);
-		
+
 		if (oldMember != null) {
 			return Util.msgAndBack(req, loginId + "는 이미 사용중인 아이디 입니다.");
 		}
-	
-		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, 
-				cellphoneNo, email);
-		
+
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNo, email);
+
 		if (joinRd.isFail()) {
-			return Util.msgAndBack(req, joinRd.getMsg());		
+			return Util.msgAndBack(req, joinRd.getMsg());
 		}
-		
+
 		return Util.msgAndReplace(req, joinRd.getMsg(), "/");
 	}
-	
-	//FIND LOGIN ID
+
+	// FIND LOGIN ID
 	@RequestMapping("/usr/member/findLoginId")
 	public String showFindLoginId(HttpServletRequest req) {
 		return "usr/member/findLoginId";
 	}
-	
+
 	@RequestMapping("/usr/member/doFindLoginId")
-	public String doFindLoginId(HttpServletRequest req, String name, String email, 
-			String redirectUri) {
-		
+	public String doFindLoginId(HttpServletRequest req, String name, String email, String redirectUri) {
+
 		if (Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
 		}
-		
+
 		Member member = memberService.getMemberByNameAndEmail(name, email);
-		
+
 		if (member == null) {
 			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
 		}
-		
-		return Util.msgAndBack(req, String.format("회원님의 아이디는 '%s' 입니다.", member.getLoginId()));			
+
+		return Util.msgAndBack(req, String.format("회원님의 아이디는 '%s' 입니다.", member.getLoginId()));
 	}
-	
-	//FIND LOGIN PASSWORD
+
+	// FIND LOGIN PASSWORD
 	@RequestMapping("/usr/member/findLoginPw")
 	public String showFindLoginPw(HttpServletRequest req) {
 		return "/usr/member/findLoginPw";
 	}
-	
+
 	@RequestMapping("/usr/member/doFindLoginPw")
-	public String doFindLoginPw(HttpServletRequest req, String loginId, String name, 
-			String email, String redirectUri) {
-		
+	public String doFindLoginPw(HttpServletRequest req, String loginId, String name, String email, String redirectUri) {
+
 		if (Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
 		}
-		
+
 		Member member = memberService.getMemberByLoginId(loginId);
-		
+
 		if (member == null) {
 			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
 		}
-		
+
 		if (member.getName().equals(name) == false) {
 			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
 		}
-		
+
 		if (member.getEmail().equals(email) == false) {
 			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
 		}
-		
+
 		ResultData notifyTempLoginPwByEmailRs = memberService.notifyTempLoginPwByEmail(member);
-		
+
 		return Util.msgAndReplace(req, notifyTempLoginPwByEmailRs.getMsg(), redirectUri);
 	}
-	
-	//EDIT USER
+
+	// EDIT
 	@RequestMapping("/mpaUsr/member/edit")
-    public String showEdit(HttpServletRequest req, String checkPasswordAuthCode) {
-		
+	public String showEdit(HttpServletRequest req, String checkPasswordAuthCode) {
+
 		Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
-		
-		ResultData checkVMPAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), 
-				checkPasswordAuthCode);
-		
+
+		ResultData checkVMPAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), checkPasswordAuthCode);
+
 		if (checkVMPAuthCodeRD.isFail()) {
 			return Util.msgAndBack(req, checkVMPAuthCodeRD.getMsg());
 		}
-		
+
 		log.debug("checkVMPAuthCodeRd : " + checkVMPAuthCodeRD);
-		
-        return "mpaUsr/member/modify";
-    }
 
-    @RequestMapping("/mpaUsr/member/doEdit")
-    public String doEdit(HttpServletRequest req, String loginPw, String name, String
-            nickname, String cellphoneNo, String email, String checkPasswordAuthCode) {
-    	
-    	Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
-    	
-    	ResultData checkVCPassAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), checkPasswordAuthCode);
-    	
-    	if (checkVCPassAuthCodeRD.isFail()) {
-    		return Util.msgAndBack(req, checkVCPassAuthCodeRD.getMsg());
-    	}
+		return "mpaUsr/member/modify";
+	}
 
-        if ( loginPw != null && loginPw.trim().length() == 0 ) {
-            loginPw = null;
-        }
+	@RequestMapping("/mpaUsr/member/doEdit")
+	public String doEdit(HttpServletRequest req, String loginPw, String name, String nickname, String cellphoneNo,
+			String email, String checkPasswordAuthCode) {
 
-        int id = ((Rq) req.getAttribute("rq")).getLoggedInMemberId();
-        ResultData modifyRd = memberService.edit(id, loginPw, name, nickname, cellphoneNo, email);
+		Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
 
-        if (modifyRd.isFail()) {
-            return Util.msgAndBack(req, modifyRd.getMsg());
-        }
+		ResultData checkVCPassAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(),
+				checkPasswordAuthCode);
 
-        return Util.msgAndReplace(req, modifyRd.getMsg(), "/");
-    }
-    
-    //CHECK PASSWORD
-    @RequestMapping("/mpaUsr/member/checkPassword")
-    public String showCheckPassword(HttpServletRequest req) {
-        return "mpaUsr/member/checkPassword";
-    }
+		if (checkVCPassAuthCodeRD.isFail()) {
+			return Util.msgAndBack(req, checkVCPassAuthCodeRD.getMsg());
+		}
 
-    @RequestMapping("/mpaUsr/member/doCheckPassword")
-    public String doCheckPassword(HttpServletRequest req, String loginPw, String redirectUri) {
-        Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
+		if (loginPw != null && loginPw.trim().length() == 0) {
+			loginPw = null;
+		}
 
-        if (loggedInMember.getLoginPw().equals(loginPw) == false) {
-            return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
-        }
-        
-        String authCode = memberService.genCheckPassAuthCode(loggedInMember.getId());
-        
-        redirectUri = Util.getNewUri(redirectUri, "checkPasswordAuthCode", authCode);
+		int id = ((Rq) req.getAttribute("rq")).getLoggedInMemberId();
+		ResultData modifyRd = memberService.edit(id, loginPw, name, nickname, cellphoneNo, email);
 
-        return Util.msgAndReplace(req, "", redirectUri);
-    }
+		if (modifyRd.isFail()) {
+			return Util.msgAndBack(req, modifyRd.getMsg());
+		}
+
+		return Util.msgAndReplace(req, modifyRd.getMsg(), "/");
+	}
+
+	// CHECK PASSWORD
+	@RequestMapping("/mpaUsr/member/checkPassword")
+	public String showCheckPassword(HttpServletRequest req) {
+		return "mpaUsr/member/checkPassword";
+	}
+
+	@RequestMapping("/mpaUsr/member/doCheckPassword")
+	public String doCheckPassword(HttpServletRequest req, String loginPw, String redirectUri) {
+		Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
+
+		if (loggedInMember.getLoginPw().equals(loginPw) == false) {
+			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
+		}
+
+		String authCode = memberService.genCheckPassAuthCode(loggedInMember.getId());
+
+		redirectUri = Util.getNewUri(redirectUri, "checkPasswordAuthCode", authCode);
+
+		return Util.msgAndReplace(req, "", redirectUri);
+	}
 }
