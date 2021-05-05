@@ -56,7 +56,8 @@
 		AND A.delStatus = 0
 	</select>
 	
-	<select id="getPrintArticles" resultType="Article">
+	<!-- ERROR -->
+	<select id="getPrintArticles" resultType="article">
 		SELECT A.*
 		IFNULL(M.name, "삭제된_회원") AS extra__writerName,
 		IFNULL(M.name, "삭제된_회원") AS extra__writerRealName		
@@ -80,7 +81,7 @@
 			</if>
 		</if>
 		ORDER BY A.id DESC
-		LIMIT #{limitFrom}, #{limitTake};	
+		LIMIT #{limitFrom}, #{limitTake}
 	</select>
 	
 	<insert id="writeNewArticle">

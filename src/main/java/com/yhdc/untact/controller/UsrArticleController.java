@@ -16,8 +16,6 @@ import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.service.ArticleService;
 import com.yhdc.untact.util.Util;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
 public class UsrArticleController {
 
@@ -44,6 +42,7 @@ public class UsrArticleController {
 		int totalItemsCount = articleService.getArticlesTotalCount(boardId, searchType, keyword);
 
 		if (keyword == null || keyword.trim().length() == 0) {
+			
 		}
 
 		req.setAttribute("totalItemsCount", totalItemsCount);
@@ -87,7 +86,7 @@ public class UsrArticleController {
 
 	// DETAIL
 	@RequestMapping("/usr/article/detail")
-	public String showDeatil(HttpServletRequest req, int id) {
+	public String showDetail(HttpServletRequest req, int id) {
 		Article article = articleService.getArticlePrintById(id);
 
 		if (article == null) {
