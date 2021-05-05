@@ -35,7 +35,8 @@ public class UsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(HttpServletRequest req, HttpSession session, String loginId, String loginPw, String redirectUri) {
+	public String doLogin(HttpServletRequest req, HttpSession session, 
+			String loginId, String loginPw, String redirectUri) {
 		
 		if (Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
@@ -55,6 +56,14 @@ public class UsrMemberController {
 		session.setAttribute("loggedInMemberId", member.getId());
 		
 		String msg = "환영합니다.";
+		
+		boolean isUsingTempPassword = memberService.isUsingTempPassword(member.getId());
+		
+		if (isUsingTempPassword) {
+			msg = "임시 비밀번호를 벽경해주세요.";
+			redirectUri = "/usr/member/mypage";
+		}
+		
 		return Util.msgAndReplace(req,  msg, redirectUri);
 	}
 	
@@ -75,7 +84,8 @@ public class UsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doJoin")
-	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname, String cellphoneNo, String email) {
+	public String doJoin(HttpServletRequest req, String loginId, String loginPw, 
+			String name, String nickname, String cellphoneNo, String email) {
 		
 		Member oldMember = memberService.getMemberByLoginId(loginId);
 		
@@ -83,7 +93,8 @@ public class UsrMemberController {
 			return Util.msgAndBack(req, loginId + "는 이미 사용중인 아이디 입니다.");
 		}
 	
-		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNo, email);
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, 
+				cellphoneNo, email);
 		
 		if (joinRd.isFail()) {
 			return Util.msgAndBack(req, joinRd.getMsg());		
@@ -99,7 +110,9 @@ public class UsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doFindLoginId")
-	public String doFindLoginId(HttpServletRequest req, String name, String email, String redirectUri) {
+	public String doFindLoginId(HttpServletRequest req, String name, String email, 
+			String redirectUri) {
+		
 		if (Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
 		}
@@ -120,7 +133,9 @@ public class UsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doFindLoginPw")
-	public String doFindLoginPw(HttpServletRequest req, String loginId, String name, String email, String redirectUri) {
+	public String doFindLoginPw(HttpServletRequest req, String loginId, String name, 
+			String email, String redirectUri) {
+		
 		if (Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
 		}
@@ -146,11 +161,12 @@ public class UsrMemberController {
 	
 	//EDIT USER
 	@RequestMapping("/mpaUsr/member/edit")
-    public String showEdit(HttpServletRequest req, String modifyPrivateAuthCode) {
+    public String showEdit(HttpServletRequest req, String checkPasswordAuthCode) {
 		
 		Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
 		
-		ResultData checkVMPAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), modifyPrivateAuthCode);
+		ResultData checkVMPAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), 
+				checkPasswordAuthCode);
 		
 		if (checkVMPAuthCodeRD.isFail()) {
 			return Util.msgAndBack(req, checkVMPAuthCodeRD.getMsg());
@@ -163,7 +179,15 @@ public class UsrMemberController {
 
     @RequestMapping("/mpaUsr/member/doEdit")
     public String doEdit(HttpServletRequest req, String loginPw, String name, String
-            nickname, String cellphoneNo, String email) {
+            nickname, String cellphoneNo, String email, String checkPasswordAuthCode) {
+    	
+    	Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
+    	
+    	ResultData checkVCPassAuthCodeRD = memberService.checkVMPAuthCodeRD(loggedInMember.getId(), checkPasswordAuthCode);
+    	
+    	if (checkVCPassAuthCodeRD.isFail()) {
+    		return Util.msgAndBack(req, checkVCPassAuthCodeRD.getMsg());
+    	}
 
         if ( loginPw != null && loginPw.trim().length() == 0 ) {
             loginPw = null;
@@ -187,11 +211,15 @@ public class UsrMemberController {
 
     @RequestMapping("/mpaUsr/member/doCheckPassword")
     public String doCheckPassword(HttpServletRequest req, String loginPw, String redirectUri) {
-        Member loginedMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
+        Member loggedInMember = ((Rq) req.getAttribute("rq")).getLoggedInMember();
 
-        if (loginedMember.getLoginPw().equals(loginPw) == false) {
+        if (loggedInMember.getLoginPw().equals(loginPw) == false) {
             return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
         }
+        
+        String authCode = memberService.genCheckPassAuthCode(loggedInMember.getId());
+        
+        redirectUri = Util.getNewUri(redirectUri, "checkPasswordAuthCode", authCode);
 
         return Util.msgAndReplace(req, "", redirectUri);
     }

@@ -18,13 +18,13 @@ spring:
       suffix: .jsp
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mysql://localhost:3306/untact?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
-    username: master
-    password: mspass
+    url: jdbc:log4jdbc:mariadb://localhost:3306/untact
+    username: daniel
+    password: danpass
 mybatis:
   type-aliases-package: com.yhdc.untact.dto
 custom:
-  siteMainUri: http://localhost:8024/
+  siteMainUri: http://localhost:8080/
   siteName: untact
   emailFrom: no-reply@localhost
   emailFromName: untactBot

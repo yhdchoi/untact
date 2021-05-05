@@ -63,12 +63,11 @@
 			<artifactId>jstl</artifactId>
 		</dependency>
 		
-		<!-- mySql Driver -->				
+		<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		    </dependency>
 		
 		<!-- Logger -->
 		<dependency>

@@ -66,6 +66,7 @@ function MemberEdit__submitForm(form) {
 <div class="section section-member-edit px-2">
 	<div class="container mx-auto">
 	    <form method="POST" action="doEdit" onsubmit="MemberEdit__submitForm(this); return false;">
+	    <input type="hidden" name="checkPasswordAuthCode" value="${param.checkPasswordAuthCode}">
 	        <input type="hidden" name="loginPw">
 	        <div class="form-control">
                 <label class="label">

@@ -1,5 +1,7 @@
 package com.yhdc.untact.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,9 @@ public class MemberService {
         return memberDao.getMemberByLoginId(loginId);
     }
 
-    public ResultData join(String loginId, String loginPw, String name, String nickname, String cellphoneNo, String email) {
+    public ResultData join(String loginId, String loginPw, String name, String nickname, 
+    		String cellphoneNo, String email) {
+    	
         memberDao.join(loginId, loginPw, name, nickname, cellphoneNo, email);
         int id = memberDao.getLastInsertId();
 
@@ -68,16 +72,39 @@ public class MemberService {
         memberDao.edit(actor.getId(), tempPassword, null, null, null, null);
     }
 
-    public ResultData edit(int id, String loginPw, String name, String nickname, String cellphoneNo, String email) {
+    public ResultData edit(int id, String loginPw, String name, String nickname, String cellphoneNo, 
+    		String email) {
+    	
         memberDao.edit(id, loginPw, name, nickname, cellphoneNo, email);
+        
+        if (loginPw != null) {
+        	attrService.remove("member", id, "extra", "useTempPassword");
+        }
 
         return new ResultData("S-1", "회원정보가 수정되었습니다.", "id", id);
     }
 
 	public ResultData checkVMPAuthCodeRD(int actorId, String checkPasswordAuthCode) {
-		if (attrService.getValue("member__" + actorId + "__extra__modifyPrivateAuthCode").equals(checkPasswordAuthCode)) {
+		if (attrService.getValue("member__" + actorId + "__extra__checkPasswordAuthCode")
+				.equals(checkPasswordAuthCode)) {
+			
 			return new ResultData("S-1", "유효한 키 입니다.");
 		}
 		return new ResultData("S-1", "유효하지 않은 키 입니다.");
+	}
+	
+	public String genCheckPassAuthCode(int actorId) {
+		String attrName = "member__" + actorId + "__extra__checkPasswordAuthCode";
+		String authCode = UUID.randomUUID().toString();
+		String expireDate = Util.getDateStrLater(60 * 60);
+		
+		attrService.setValue(attrName, authCode, expireDate);
+		
+		return authCode;
+	}
+
+	public boolean isUsingTempPassword(int actorId) {
+
+		return attrService.getValue("member", actorId, "extra", "useTempPassword").equals("1");
 	}
 }
