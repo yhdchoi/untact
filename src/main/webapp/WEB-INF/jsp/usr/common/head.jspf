@@ -85,7 +85,7 @@
 							</div>
 						</li>
 						
-						<c:if test="${rq.isLoggedIn()}">
+						<c:if test="${rq.isLoggedIn}">
 						<li>
 							<a href="../member/doLogout" class="h-full flex items-center px-5">
 								<span> 

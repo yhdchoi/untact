@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yhdc.untact.dto.Article;
 import com.yhdc.untact.dto.Board;
+import com.yhdc.untact.dto.Reply;
 import com.yhdc.untact.dto.ResultData;
+import com.yhdc.untact.dto.Rq;
 import com.yhdc.untact.service.ArticleService;
+import com.yhdc.untact.service.ReplyService;
 import com.yhdc.untact.util.Util;
 
 @Controller
@@ -21,6 +24,9 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	private ReplyService replyService;
 
 	// LIST
 	@RequestMapping("/usr/article/list")
@@ -88,13 +94,16 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, int id) {
 		Article article = articleService.getArticlePrintById(id);
+		
+		List<Reply> replies = replyService.getPrintRepliesByRelTypeCodeAndRelId("article", id);
 
 		if (article == null) {
 			return Util.msgAndBack(req, id + "번 게시물은 존제하지 않습니다.");
 		}
 
 		Board board = articleService.getBoardById(article.getBoardId());
-
+		
+		req.setAttribute("replies", replies);
 		req.setAttribute("article", article);
 		req.setAttribute("board", board);
 
@@ -129,8 +138,10 @@ public class UsrArticleController {
 			return Util.msgAndBack(req, "내용을 작성해 주세요.");
 		}
 
-		int memberId = 3; // TEMP
-
+		Rq rq = (Rq)req.getAttribute("rq");
+		
+		int memberId = rq.getLoggedInMemberId();
+		
 		ResultData writeArticleRd = articleService.writeNewArticle(boardId, memberId, title, content);
 
 		if (writeArticleRd.isFail()) {

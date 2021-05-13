@@ -79,22 +79,71 @@
 
             <div>
                 <h1 class="title-bar-type-2 px-4">댓글</h1>
-                <div class="px-4 py-8">
-                    <!-- 댓글 입력 시작 -->
-                    <form class="relative flex py-4 text-gray-600 focus-within:text-gray-400">
-                        <img class="w-10 h-10 object-cover rounded-full shadow mr-2 cursor-pointer" alt="User avatar" src="https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=200">
+                <c:if test="${rq.isNotLoggedIn}">
+                    <div class="text-center py-4">
+                         글 작성은 <a class="plain-link" href="${rq.loginPageUri}">로그인</a> 후 이용할 수 있습니다.
+                     </div>                 </c:if>
+                 <c:if test="${rq.isLoggedIn}">
+                     <div class="px-4 py-8">
+                         <!-- 댓글 입력 시작 -->
+                         <form method="POST" action="../reply/doWrite" class="relative flex py-4 text-gray-600 focus-within:text-gray-400">
+                             <input type="hidden" name="relTypeCode" value="article" />
+                             <input type="hidden" name="relId" value="${article.id}" />
+                             <input type="hidden" name="redirectUri" value="${rq.currentUri}" />
+                             <img class="w-10 h-10 object-cover rounded-full shadow mr-2 cursor-pointer" alt="User avatar" src="https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=200">
 
-                        <span class="absolute inset-y-0 right-0 flex items-center pr-6">
-                            <button type="submit" class="p-1 focus:outline-none focus:shadow-none hover:text-blue-500">
-                                <svg class="w-6 h-6 transition ease-out duration-300 hover:text-blue-500 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </button>
-                        </span>
+                             <span class="absolute inset-y-0 right-0 flex items-center pr-6">
+                                 <button type="submit" class="p-1 focus:outline-none focus:shadow-none hover:text-blue-500">
+                                     <i class="fas fa-pen"></i>
+                                 </button>
+                             </span>
 
-                        <input type="search" class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue" style="border-radius: 25px" placeholder="댓글을 입력해주세요." autocomplete="off">
-                    </form>
-                    <!-- 댓글 입력 끝 -->
+                             <input name="body" type="text" class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue" style="border-radius: 25px" placeholder="댓글을 입력해주세요." autocomplete="off">
+                         </form>
+                         <!-- 댓글 입력 끝 -->
+                     </div>
+                 </c:if>
+
+                 <!-- 댓글 리스트 -->
+                 <div>
+                     <c:forEach items="${replies}" var="reply">
+						<div class="py-5 px-4">
+                             <div class="flex">
+                                 <!-- 아바타 이미지 -->
+                                 <div class="flex-shrink-0">
+                                     <img class="w-10 h-10 object-cover rounded-full shadow mr-2 cursor-pointer" alt="User avatar" src="https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=200">
+                                 </div>
+                                 <div class="flex-grow px-1">
+                                     <div class="flex text-gray-400 text-light text-sm">
+                                         <spqn>${reply.extra__writerName}</spqn>
+                                         <span class="mx-1">·</span>
+                                         <spqn>${reply.updateDate}</spqn>
+                                     </div>
+                                     <div class="break-all">
+                                         ${reply.contentForPrint}
+                                     </div>
+                                     <div class="mt-1">
+                                         <span class="text-gray-400 cursor-pointer">
+                                             <span><i class="fas fa-thumbs-up"></i></span>
+                                             <span>5,600</span>
+                                         </span>
+                                         <span class="ml-1 text-gray-400 cursor-pointer">
+                                             <span><i class="fas fa-thumbs-down"></i></span>
+                                             <span>5,600</span>
+                                         </span>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="plain-link-wrap gap-3 mt-3">
+                                 <c:if test="${reply.memberId == rq.loggedInMemberId}">
+                                    <a onclick="if ( !confirm('정말 삭제하시겠습니까?') ) return false;" href="../reply/doDelete?id=${reply.id}&redirectUri=${rq.encodedCurrentUri}" class="plain-link">
+                                         <span><i class="fas fa-trash-alt"></i></span>
+                                         <span>글 삭제</span>
+                                     </a>
+                                 </c:if>
+                             </div>
+                         </div>
+                     </c:forEach>
                 </div>
             </div>
         </div>
