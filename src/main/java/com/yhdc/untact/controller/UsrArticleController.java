@@ -148,7 +148,7 @@ public class UsrArticleController {
 			return Util.msgAndBack(req, writeArticleRd.getMsg());
 		}
 
-		String replaceUri = "detail?id=" + writeArticleRd.getBody().get("id");
+		String replaceUri = "detail?id=" + writeArticleRd.getContent().get("id");
 		return Util.msgAndReplace(req, writeArticleRd.getMsg(), replaceUri);
 	}
 
@@ -194,7 +194,7 @@ public class UsrArticleController {
 			return Util.msgAndBack(req, rd.getMsg());
 		}
 
-		String redirectUri = "../article/list?boardId=" + rd.getBody().get("boardId");
+		String redirectUri = "../article/list?boardId=" + rd.getContent().get("boardId");
 		return Util.msgAndReplace(req, rd.getMsg(), redirectUri);
 	}
 

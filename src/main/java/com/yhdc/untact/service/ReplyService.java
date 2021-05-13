@@ -33,4 +33,10 @@ public class ReplyService {
 		replyDao.delete(id);
 		return new ResultData("S-1", id + "번 댓글이 삭제되었습니다.", "id", id);
 	}
+	
+	public ResultData edit(int id, String body) {
+        replyDao.edit(id, body);
+
+        return new ResultData("S-1", id + "번 댓글이 수정되었습니다.", "id", id);
+    }
 }

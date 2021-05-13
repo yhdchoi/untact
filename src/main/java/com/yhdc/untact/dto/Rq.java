@@ -7,6 +7,8 @@ import com.yhdc.untact.util.Util;
 import lombok.Getter;
 
 public class Rq {
+	@Getter
+	private boolean isAjax;
 	private String currentUrl;
 	@Getter
     private String currentUri;
@@ -15,13 +17,18 @@ public class Rq {
     @Getter
     private boolean needToChangePassword;
 
-    public Rq(Member loggedInMember, String currentUri, Map<String, String> paramMap, boolean needToChangePassword) {
-        this.loggedInMember = loggedInMember;
+    public Rq(boolean isAjax, Member loggedInMember, String currentUri, Map<String, String> paramMap, boolean needToChangePassword) {
+    	this.isAjax = isAjax;
+    	this.loggedInMember = loggedInMember;
         this.currentUrl = currentUri.split("\\?")[0];
         this.currentUri = currentUri;
         this.paramMap = paramMap;
         this.needToChangePassword = needToChangePassword;
     }
+    
+    public String getParamJsonStr() {
+		return Util.toJsonStr(paramMap);
+	}
 
     public boolean isLoggedIn() {
         return loggedInMember != null;

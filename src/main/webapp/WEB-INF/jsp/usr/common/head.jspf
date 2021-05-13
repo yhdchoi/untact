@@ -24,7 +24,11 @@
 <link rel="stylesheet" href="/resource/common.css" />
 <script src="/resource/common.js" defer></script>
 
-<title>INSTA</title>
+<title>myBB</title>
+
+<script>
+ const param = ${rq.paramJsonStr};
+ </script>
 </head>
 
 <body>
