@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.yhdc.untact.dto.Member;
 import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.dto.Rq;
+import com.yhdc.untact.service.GenFileService;
 import com.yhdc.untact.service.MemberService;
 import com.yhdc.untact.util.Util;
 
@@ -21,6 +22,9 @@ public class UsrMemberController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private GenFileService genFileService;
 
 	// MYPAGE
 	@RequestMapping("/mpaUsr/member/mypage")

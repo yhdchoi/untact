@@ -1,8 +1,10 @@
 package com.yhdc.untact.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.yhdc.untact.interceptor.BeforeActionInterceptor;
@@ -22,7 +24,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Autowired
 	NeedToLogoutInterceptor needToLogoutInterceptor;
 	
-	//APPLYING INTERCEPTOR
+	@Value("${custom.genFileDirPath}")
+	private String genFileDirPath;
+	
+	// IMPLEMENTING INTERCEPTOR
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(beforeActionInterceptor)
@@ -59,6 +64,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		        .addPathPatterns("/mpaUsr/member/doFindLoginId")
 		        .addPathPatterns("/mpaUsr/member/findLoginPw")
 		        .addPathPatterns("/mpaUsr/member/doFindLoginPw");
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/gen/**").addResourceLocations("file://" + genFileDirPath + "/").setCachePeriod(20); 
 	}
 		
 }
