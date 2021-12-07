@@ -1,4 +1,4 @@
-package com.sbs.untactTeacher;
+package com.yhdc.untact;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
