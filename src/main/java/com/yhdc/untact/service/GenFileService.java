@@ -1,18 +1,5 @@
 package com.yhdc.untact.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 
 import com.google.common.base.Joiner;
 import com.yhdc.untact.dao.GenFileDao;
@@ -20,29 +7,39 @@ import com.yhdc.untact.dto.GenFile;
 import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.util.Util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
 @Service
 public class GenFileService {
-	@Value("${custom.genFileDirPath}")
-	private String genFileDirPath;
-	
-	@Autowired
-	private GenFileDao genFileDao;
-	
-	public ResultData saveMeta(String relTypeCode, int relId, String typeCode, String type2Code, 
-			int fileNo, String originFileName, String fileExtTypeCode, String fileExtType2Code, 
-			String fileExt, int fileSize, String fileDir) {
-		
-		Map<String, Object> param = Util.mapOf("relTypeCode", relTypeCode, "relId" , relId, "typeCode", typeCode, 
-				"type2Code", type2Code, "fileNo", fileNo, "originFileName", originFileName, "fileExtTypeCode", fileExtTypeCode, 
-				"fileExtType2Code", fileExtType2Code, "fileExt", fileExt, "fileSize", fileSize, "fileDir", fileDir);
-		
-		genFileDao.saveMeta(param);
-		
-		int id = Util.getAsInt(param.get("id"), 0);
-		return new ResultData("S-1", "성공하였습니다.", "id", id);				
-	}
-	
-	public ResultData save(MultipartFile multipartFile, String relTypeCode, int relId, String typeCode, String type2Code, int fileNo) {
+    @Value("${custom.genFileDirPath}")
+    private String genFileDirPath;
+
+    @Autowired
+    private GenFileDao genFileDao;
+
+    public ResultData saveMeta(String relTypeCode, int relId, String typeCode, String type2Code, int fileNo,
+                               String originFileName, String fileExtTypeCode, String fileExtType2Code, String fileExt, int fileSize,
+                               String fileDir) {
+
+        Map<String, Object> param = Util.mapOf("relTypeCode", relTypeCode, "relId", relId, "typeCode", typeCode,
+                "type2Code", type2Code, "fileNo", fileNo, "originFileName", originFileName, "fileExtTypeCode",
+                fileExtTypeCode, "fileExtType2Code", fileExtType2Code, "fileExt", fileExt, "fileSize", fileSize,
+                "fileDir", fileDir);
+        genFileDao.saveMeta(param);
+
+        int id = Util.getAsInt(param.get("id"), 0);
+        return new ResultData("S-1", "성공하였습니다.", "id", id);
+    }
+
+    public ResultData save(MultipartFile multipartFile, String relTypeCode, int relId, String typeCode, String type2Code, int fileNo) {
         String fileInputName = multipartFile.getName();
         String[] fileInputNameBits = fileInputName.split("__");
 
@@ -79,7 +76,7 @@ public class GenFileService {
 
         ResultData saveMetaRd = saveMeta(relTypeCode, relId, typeCode, type2Code, fileNo, originFileName,
                 fileExtTypeCode, fileExtType2Code, fileExt, fileSize, fileDir);
-        int newGenFileId = (int) saveMetaRd.getContent().get("id");
+        int newGenFileId = (int) saveMetaRd.getBody().get("id");
 
         // 새 파일이 저장될 폴더(io파일) 객체 생성
         String targetDirPath = genFileDirPath + "/" + relTypeCode + "/" + fileDir;
@@ -149,7 +146,7 @@ public class GenFileService {
 
             if (multipartFile.isEmpty() == false) {
                 ResultData fileResultData = save(multipartFile);
-                int genFileId = (int) fileResultData.getContent().get("id");
+                int genFileId = (int) fileResultData.getBody().get("id");
                 genFileIds.add(genFileId);
 
                 filesResultData.put(fileInputName, fileResultData);
@@ -196,6 +193,12 @@ public class GenFileService {
         }
     }
 
+    public void deleteGenFile(String relTypeCode, int relId, String typeCode, String type2Code, int fileNo) {
+        GenFile genFile = genFileDao.getGenFile(relTypeCode, relId, typeCode, type2Code, fileNo);
+
+        deleteGenFile(genFile);
+    }
+
     private void deleteGenFile(GenFile genFile) {
         String filePath = genFile.getFilePath(genFileDirPath);
         Util.deleteFile(filePath);
@@ -209,7 +212,7 @@ public class GenFileService {
 
     public Map<Integer, Map<String, GenFile>> getFilesMapKeyRelIdAndFileNo(String relTypeCode, List<Integer> relIds,
                                                                            String typeCode, String type2Code) {
-        List<GenFile> genFiles = genFileDao.getGenFileDetails(relTypeCode, relIds,
+        List<GenFile> genFiles = genFileDao.getGenFilesRelTypeCodeAndRelIdsAndTypeCodeAndType2Code(relTypeCode, relIds,
                 typeCode, type2Code);
         Map<String, GenFile> map = new HashMap<>();
         Map<Integer, Map<String, GenFile>> rs = new LinkedHashMap<>();
@@ -238,4 +241,5 @@ public class GenFileService {
             }
         }
     }
+
 }

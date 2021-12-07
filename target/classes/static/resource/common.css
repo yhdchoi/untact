@@ -62,14 +62,6 @@ html > body {
   border-bottom: 1px solid #afafaf;
 }
 
-.title-bar {
-	padding-top: 4rem;
-}
-
-.title-bar:first-child {
-  margin-top: 0;
-}
-
 .title-bar-type-2 {
   font-size:1.1rem;
   padding-top:5px;
@@ -184,13 +176,6 @@ html > body .plain-link:hover {
 /* 유틸 - 끝 */
 
 /* 기타 - 시작 */
-/* .component-title-bar {
-  border: solid black;
-  border-width: 2px 0;
-  margin-top: 20px;
-  margin-bottom: 10px;
-} */
-
 .title-bar {
   font-size: 1.2rem;
   margin-bottom: 1rem;
@@ -213,16 +198,16 @@ html > body .plain-link:hover {
 .top-bar {
   /* .bg-white */
   background-color:white;
-
+  
   /* .shadow-lg */
   --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-
+  
   height: 3rem;
 }
 
 .top-bar + * {
-	padding-top: 4rem;
+  padding-top: 4rem;
 }
 
 /* 탑바 - 메뉴 박스 시작 */

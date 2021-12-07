@@ -6,5 +6,3 @@ function isTouchDevice() {
 
 const $html = document.querySelector('html');
 $html.classList.add(isTouchDevice() ? 'touch-posible' : 'touch-imposible');
-
- 

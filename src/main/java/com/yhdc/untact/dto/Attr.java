@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Attr {
-	private int id;
+    private int id;
     private String regDate;
     private String updateDate;
     private String expireDate;

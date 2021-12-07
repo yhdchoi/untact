@@ -1,39 +1,34 @@
 package com.yhdc.untact.dao;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.yhdc.untact.dto.Article;
 import com.yhdc.untact.dto.Board;
 
+import java.util.List;
+
 @Mapper
 public interface ArticleDao {
+    boolean modifyArticle(@Param("id") int id, @Param("title") String title, @Param("body") String body);
 
-	// GET
-	Article getArticleById(@Param("id") int id);
+    void writeArticle(@Param("boardId") int boardId, @Param("memberId") int memberId, @Param("title") String title,
+                      @Param("body") String body);
 
-	Article getArticlePrintById(@Param("id") int id);
+    Article getArticleById(@Param("id") int id);
 
-	Board getBoardById(@Param("id") int id);
+    int getLastInsertId();
 
-	int getLastInsertId();
+    void deleteArticleById(@Param("id") int id);
 
-	int getArticlesTotalCount(@Param("boardId") int boardId, @Param("searchType") String searchType,
-			@Param("keyword") String keyword);
+    Board getBoardById(@Param("id") int id);
 
-	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("searchType") String searchType,
-			@Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
+    int getArticlesTotalCount(@Param("boardId") int boardId,
+                              @Param("searchKeywordTypeCode") String searchKeywordTypeCode, @Param("searchKeyword") String searchKeyword);
 
-	// WRITE
-	void writeNewArticle(@Param("boardId") int boardId, @Param("memberId") int memeberId, @Param("title") String title,
-			@Param("content") String content);
+    List<Article> getForPrintArticles(@Param("boardId") int boardId,
+                                      @Param("searchKeywordTypeCode") String searchKeywordTypeCode, @Param("searchKeyword") String searchKeyword,
+                                      @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
-	// EDIT
-	boolean editArticle(@Param("id") int id, @Param("title") String title, @Param("content") String content);
-
-	// DELETE
-	void deleteArticleById(@Param("id") int id);
-
+    Article getForPrintArticleById(@Param("id") int id);
 }

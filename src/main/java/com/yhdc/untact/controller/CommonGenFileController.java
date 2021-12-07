@@ -1,12 +1,9 @@
 package com.yhdc.untact.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
+import com.yhdc.untact.dto.GenFile;
+import com.yhdc.untact.dto.ResultData;
+import com.yhdc.untact.exception.GenFileNotFoundException;
+import com.yhdc.untact.service.GenFileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,21 +13,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartRequest;
 
-import com.yhdc.untact.dto.GenFile;
-import com.yhdc.untact.dto.ResultData;
-import com.yhdc.untact.exception.GenFileNotFoundException;
-import com.yhdc.untact.service.GenFileService;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Map;
 
 @Controller
 public class CommonGenFileController {
-	@Value("${custom.genFileDirPath}")
+    @Value("${custom.genFileDirPath}")
     private String genFileDirPath;
 
     @Autowired

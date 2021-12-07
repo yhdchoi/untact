@@ -1,25 +1,26 @@
 package com.yhdc.untact.interceptor;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-
 import com.yhdc.untact.dto.Member;
 import com.yhdc.untact.dto.Rq;
 import com.yhdc.untact.service.MemberService;
 import com.yhdc.untact.util.Util;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
+
 @Component
+@Slf4j
 public class BeforeActionInterceptor implements HandlerInterceptor {
     @Autowired
     private MemberService memberService;
-    
+
     private boolean isAjax(HttpServletRequest req) {
         String[] pathBits = req.getRequestURI().split("/");
 
@@ -63,25 +64,24 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 
         return isAjax;
     }
-    
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
-
         Map<String, String> paramMap = Util.getParamMap(req);
 
         HttpSession session = req.getSession();
 
-        Member loggedInMember = null;
-        int loggedInMemberId = 0;
+        Member loginedMember = null;
+        int loginedMemberId = 0;
 
         if (session.getAttribute("loginedMemberId") != null) {
-            loggedInMemberId = (int) session.getAttribute("loginedMemberId");
+            loginedMemberId = (int) session.getAttribute("loginedMemberId");
         }
 
-        if (loggedInMemberId != 0) {
-        	String loggedInMemberJsonStr = (String) session.getAttribute("loggedInMemberJsonStr");
-        	loggedInMember = Util.fromJsonStr(loggedInMemberJsonStr, Member.class);
+        if (loginedMemberId != 0) {
+            String loginedMemberJsonStr = (String) session.getAttribute("loginedMemberJsonStr");
+
+            loginedMember = Util.fromJsonStr(loginedMemberJsonStr, Member.class);
         }
 
         String currentUri = req.getRequestURI();
@@ -90,19 +90,20 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
         if (queryString != null && queryString.length() > 0) {
             currentUri += "?" + queryString;
         }
-        
+
         boolean needToChangePassword = false;
-        
-        if (loggedInMember != null) {
-        	if (session.getAttribute("needToChangePassword") == null) {
-        		needToChangePassword = memberService.needToChangePassword(loggedInMember.getId());
-        		
-        		session.setAttribute("needToChangePassword", needToChangePassword);
-        	}
-        	needToChangePassword = (boolean) session.getAttribute("needToChangePassword");
+
+        if (loginedMember != null) {
+            if (session.getAttribute("needToChangePassword") == null) {
+                needToChangePassword = memberService.needToChangePassword(loginedMember.getId());
+
+                session.setAttribute("needToChangePassword", needToChangePassword);
+            }
+
+            needToChangePassword = (boolean) session.getAttribute("needToChangePassword");
         }
 
-        req.setAttribute("rq", new Rq(isAjax(req), loggedInMember, currentUri, paramMap, needToChangePassword));
+        req.setAttribute("rq", new Rq(isAjax(req), memberService.isAdmin(loginedMember), loginedMember, currentUri, paramMap, needToChangePassword));
 
         return HandlerInterceptor.super.preHandle(req, resp, handler);
     }

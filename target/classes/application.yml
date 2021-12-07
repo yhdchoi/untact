@@ -2,14 +2,14 @@ server:
   port: 8080
 spring:
   servlet:
-     multipart:
-       max-file-size: 50MB
-       max-request-size: 50MB
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   mail:
     host: smtp.gmail.com
     port: 587
-    username: lilmonster8312@gmail.com
-    password: yohquuqlosthdslu
+    username: yhdchoi@gmail.com
+    password: sadppakfrnqfbjar
     properties:
       mail:
         smtp:
@@ -22,18 +22,19 @@ spring:
       suffix: .jsp
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mariadb://localhost:3306/untact
-    username: daniel
-    password: danpass
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/untact?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
+    username: sbsst
+    password: sbs123414
 mybatis:
   type-aliases-package: com.yhdc.untact.dto
 custom:
-  genFileDirPath: /Users/daniel/Documents/Spring_workspace/SpringClass/insta-usr-sb-file
-  needToChangePassFreeDays: 50
+  genFileDirPath: ~/Documents/Spring_workspace/temp/untactFiles
+  needToChangePasswordFreeDays: 50
   siteMainUri: http://localhost:8080/
-  siteName: untact
+  siteName: 인스타
   emailFrom: no-reply@localhost
-  emailFromName: untactBot
+  emailFromName: 인스타알림봇
   logging:
     dir: log
     level: debug

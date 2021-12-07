@@ -1,22 +1,28 @@
 package com.yhdc.untact.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-
 import com.yhdc.untact.dto.Rq;
 import com.yhdc.untact.util.Util;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Component
+@Slf4j
 public class NeedToLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         Rq rq = (Rq) req.getAttribute("rq");
 
-        if (rq.isNotLoggedIn()) {
-        	String resultCode = "F-A";
+        // isAjax=Y
+        // doDeleteAjax
+        // get
+
+        if (rq.isNotLogined()) {
+            String resultCode = "F-A";
             String resultMsg = "로그인 후 이용해주세요.";
 
             if ( rq.isAjax() ) {
@@ -28,6 +34,7 @@ public class NeedToLoginInterceptor implements HandlerInterceptor {
                 String afterLoginUri = rq.getEncodedCurrentUri();
                 resp.getWriter().append(Util.msgAndReplace(resultMsg, "../member/login?afterLoginUri=" + afterLoginUri));
             }
+
             return false;
         }
 
